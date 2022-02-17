@@ -1,0 +1,108 @@
+//navbar
+/*body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}*/
+.navbar {//stessa classe bootstrap con solo margin bottom in più
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 20vh;
+}
+
+
+//footer
+
+
+#sticky-footer {
+  //flex: 1 0 auto;
+  margin-top: 50vh;
+  width: 100%;
+  position: sticky;
+  bottom: 0;
+  max-width: 100%;
+  //overflow: hidden;
+}
+
+/* Other Classes for Page Styling */
+
+body {
+  background: #007bff;
+  background: linear-gradient(to right, #0062E6, #33AEFF);
+}
+
+//card bootstrap
+.cardcentered{
+    margin: auto;
+    width: 80%;
+    height: fit-content;
+}
+
+.loginbutton{
+    margin-top: 5%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+}
+/*.btn.disabled, .btn:disabled, fieldset:disabled .btn,.loginbutton1:disabled:hover,.btn:disabled {
+  /* pointer-events: none; */
+  /*opacity: .65;
+  cursor: not-allowed;
+}
+.loginbutton1:disabled:hover{
+  cursor: not-allowed;
+}*/
+
+
+//messaggi errore form login
+.loginformerrormessage{
+  color: red;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+//div registrazione
+.registerdiv{
+    margin-top: 5%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    align-items: center;
+    word-wrap: break-word;
+}
+.registertext{
+    text-decoration: none;
+}
+//testo link registrazione
+.registertext:hover{
+ cursor: pointer;
+}
+
+.registertext:visited{
+  color: violet;
+}
+
+//media query footer
+@media only screen and (min-width:0px) and (max-width:400px) {
+    #sticky-footer {
+        //flex: 1 0 auto;
+        margin-top: 200%;
+        width: 100%;
+        position: sticky;
+        bottom: 0;
+        max-width: 100%;
+        margin-right: 500%;
+      }
+}

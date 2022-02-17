@@ -1,0 +1,82 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(224, 183, 183);">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">TODO Crud</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Dropdown
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+          </li>
+        </ul>
+        <!--<form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </form>-->
+      </div>
+    </div>
+</nav>
+
+<div> 
+  <div class="card cardcentered" style="width: 40vh;">
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-body">
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <!--LOGIN FORM-->
+      <form id="loginform" [formGroup]="loginForm">
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="email" placeholder="name@example.com" formControlName="email">
+          <label for="email">Email address</label>
+        </div>
+        <small class="loginformerrormessage" *ngIf="emailinputvalue?.errors?.['email'] && emailinputvalue?.touched">formato email non valido</small>
+        <div class="form-floating">
+          <input type="password" class="form-control" id="password" placeholder="Password" formControlName="password">
+          <label for="password">Password</label>
+        </div>
+        <small class="loginformerrormessage" *ngIf="passwordinputvalue?.errors?.['required'] && passwordinputvalue?.touched">errore password richiesta</small>
+        <small class="loginformerrormessage" *ngIf="passwordinputvalue?.errors?.['minlength'] && passwordinputvalue?.touched">password almeno 6 caratteri</small>
+        <div class="loginbutton">
+          <button class="btn btn-primary loginbutton1" (click)="Login()" type="button" [disabled]="loginForm.invalid">
+            Login
+          </button>
+        </div>
+      </form>
+      <!--END LOGIN FORM-->
+      <div class="registerdiv">
+        <p>
+          <a class="registertext" routerLink="/register">
+            or register here
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white-50 sticky-top">
+  <div class="container text-center">
+    <small>Copyright &copy; Your Website</small>
+  </div>
+</footer>
+
+
+<!--BOTTONE SLIDER STILE IOS-->
+<!-- <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="mySwitch" name="darkmode" value="yes" checked>
+        <label class="form-check-label" for="mySwitch">Dark Mode</label>
+      </div>-->

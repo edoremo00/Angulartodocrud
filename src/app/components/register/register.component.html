@@ -1,0 +1,128 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(224, 183, 183);">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">TODO Crud</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Dropdown
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+          </li>
+        </ul>
+        <!--<form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </form>-->
+      </div>
+    </div>
+</nav>
+
+<div> 
+    <div class="card cardcentered" style="width: 40vh;">
+      <img src="..." class="card-img-top" alt="...">
+      <div class="card-body">
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <!--LOGIN FORM-->
+        <form id="registerform" [formGroup]="registerform">
+            <!--NAME-->
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="name" placeholder="insert your name" formControlName="name">
+                <label for="name">Name</label>
+            </div>
+            <small class="registerformerrormessage" *ngIf="name?.errors?.['required'] && name?.touched">name is required</small>
+            <small class="registerformerrormessage" *ngIf="name?.errors?.['minlength'] && name?.touched">name should at least have one letter</small>
+            <!--LASTNAME-->
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="lastname" placeholder="insert your lastname" formControlName="lastname">
+            <label for="lastname">Lastname</label>
+          </div>
+          <small class="registerformerrormessage" *ngIf="lastname?.errors?.['minlength'] && lastname?.touched">lastname should at least have one letter</small>
+          <small class="registerformerrormessage" *ngIf="lastname?.errors?.['required'] && lastname?.touched">lastname is required</small>
+          <!--USERNAME-->
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="username" placeholder="insert your username" formControlName="username">
+            <label for="username">username</label>
+          </div>
+          <small class="registerformerrormessage" *ngIf="username?.errors?.['minlength'] && username?.touched">username should at least have one letter</small>
+          <small class="registerformerrormessage" *ngIf="username?.errors?.['required'] && username?.touched">username is required</small>
+          <!--EMAIL-->
+          <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="email" placeholder="email@example.com" formControlName="email">
+            <label for="email">email</label>
+          </div>
+          <small class="registerformerrormessage" *ngIf="email?.errors?.['required'] && email?.touched">email is required</small>
+          <small class="registerformerrormessage" *ngIf="email?.errors?.['email'] && email?.touched">not a valid email</small>
+          <!--PASSWORD-->
+          <div class="form-floating">
+            <input type="password" class="form-control" id="password" placeholder="Password" formControlName="password">
+            <label for="password">Password</label>
+          </div>
+          <small class="registerformerrormessage" *ngIf="password?.errors?.['required'] && password?.touched">password is required</small>
+		  <!--CONFIRMPASSWORD-->
+		  <div class="form-floating mt-3">
+            <input type="password" class="form-control" id="confirmpassword" placeholder="confrimpassword" formControlName="confirmpassword">
+            <label for="confirmpassword">confirmpassword</label>
+          </div>
+          <small class="registerformerrormessage" *ngIf="confirmpassword?.errors?.['required'] && confirmpassword?.touched">confirmpassword is required</small>
+          <small class="registerformerrormessage" *ngIf="confirmpassword?.errors?.['minlength'] && confirmpassword?.touched">confirmpassword should at least have 6 chars</small>
+          <small class="registerformerrormessage" *ngIf="confirmpassword?.value!==password?.value">passwords do not match</small>
+		  <br>
+		  <small class="registerformerrormessage" *ngIf="confirmpassword?.errors?.['passwordandconfirmpasswequal'] && confirmpassword?.touched">password and confirmpassword are not equal</small>
+		  <!--BIRTHDAY DATE-->
+		  <div class="form-floating mt-3">
+            <input type="date" class="form-control" id="birthday" placeholder="birthday" formControlName="birthday">
+            <label for="birthday">birthday</label>
+      </div>
+      
+          <small class="registerformerrormessage" *ngIf="birthday?.errors?.['required'] && birthday?.touched">birthday is required</small>
+		      <small class="registerformerrormessage" *ngIf="birthday?.errors?.['validatedate'] && birthday?.touched">birthdaydate cannot be today</small>
+		  <!--REGISTERBUTTON-->
+          <div class="registerbutton">
+            <button class="btn btn-primary loginbutton1" (click)="Register()" type="button" [disabled]="registerform.invalid||confirmpassword?.value!==password?.value">
+              Register
+            </button>
+          </div>
+        </form>
+        <!--END REGISTER FORM-->
+      </div>
+    </div>
+  </div>
+  <hr>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th><!--ID-->
+        <th scope="col">username</th>
+        <th scope="col">email</th>
+        <th scope="col">birthday</th>
+        <th scope="col">index</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users; let i=index" (click)="getclickedrow(user)">
+        <td>{{user.userid}}</td>
+        <td>{{user.username}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.birthday}}</td>
+        <td>{{i}}</td>
+      </tr>
+    </tbody>
+  </table>
