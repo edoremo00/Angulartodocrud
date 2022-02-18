@@ -29,7 +29,9 @@ export class RegisterComponent implements OnInit {
 
   updateuserform:FormGroup=new FormGroup({
     editname:new FormControl('',[Validators.required,Validators.minLength(1)]),
-    editbirthday:new FormControl('',[Validators.required,validatedate()])
+    editbirthday:new FormControl('',[Validators.required,validatedate()]),
+    
+
   })
 
   get name(){
@@ -110,11 +112,37 @@ export class RegisterComponent implements OnInit {
     })
   }
 
+  test():void{
+    console.log('click save')
+  }
+
+  premuto():void{
+    console.log('premuto tasto')
+  }
+
+  oneditmodalclosed(){//mostra popup di conferma
+    var myModalEl = document.getElementById('modelId');
+    if(myModalEl){
+        myModalEl.addEventListener('hide.bs.modal', function (event) {
+            let userchoice:boolean=confirm('data will be lost')
+            event.stopImmediatePropagation()//se non presente qui a volte alert si triggera più volte se premuto annulla
+            if(!userchoice){
+              event.preventDefault()//impedisco a evento di propagarsi
+            }else{
+              event.stopImmediatePropagation()//faccio fare evento chiusura e stoppo propagazione in teoria
+            }
+           }
+      );
+    }
+    
+  }
+
  
 
   edituser(usertoedit:Identityuserinterface){
-    this.updateuserform.patchValue({editname:this.usertoedit_todelete.username})
-    this.updateuserform.patchValue({editbirthday:this.usertoedit_todelete.birthday})
+    this.usertoedit_todelete=usertoedit;
+    this.updateuserform.patchValue({editname:usertoedit.username})
+    this.updateuserform.patchValue({editbirthday:usertoedit.birthday})
   }
   deleteuser(usertodelete:Identityuserinterface){
     console.log("user to delete"+usertodelete.userid)
