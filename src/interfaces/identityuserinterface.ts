@@ -6,5 +6,5 @@ export interface Identityuserinterface{
    password:string;
    confirmpassword?:string,
    email:string;
-   birthday?:Date;//oppure faremo stringa se dovesse dare problemi
+   birthday?:string;//oppure faremo stringa se dovesse dare problemi
 }
