@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 import { AuthService } from 'src/app/services/auth.service';
 import { Identityuserinterface } from 'src/interfaces/identityuserinterface';
 import { validatedate } from '../customvalidators/datevalidator';
@@ -14,7 +15,8 @@ import { passwordandconfirmpasswequal } from '../customvalidators/passwordandcon
 })
 export class RegisterComponent implements OnInit {
 
-  
+  usertoedit_todelete:Identityuserinterface={password:'',email:''};//per avere sempre utente cliccatoe poterlo aggiornare
+
   registerform:FormGroup=new FormGroup({
     name:new FormControl('',[Validators.required,Validators.minLength(1)]),
     lastname:new FormControl('',[Validators.required,Validators.minLength(1)]),
@@ -23,6 +25,11 @@ export class RegisterComponent implements OnInit {
     password:new FormControl('',[Validators.required,Validators.minLength(6)]),
     confirmpassword:new FormControl('',[Validators.required,Validators.minLength(6),]),//passwordandconfirmpasswequal('') custom validator
     birthday:new FormControl('',[Validators.required,validatedate()])
+  })
+
+  updateuserform:FormGroup=new FormGroup({
+    editname:new FormControl('',[Validators.required,Validators.minLength(1)]),
+    editbirthday:new FormControl('',[Validators.required,validatedate()])
   })
 
   get name(){
@@ -90,7 +97,12 @@ export class RegisterComponent implements OnInit {
   Getall(){
     this.authservice.Getall().subscribe({
       next:(getusers)=>{
+        //this.users=getusers
         this.users=getusers
+        this.users.map(U=>{//trasforma data utenti formattandola
+          U.birthday= moment(U.birthday).format('YYYY-MM-DD').toString()
+        })
+        
       },error:(err:HttpErrorResponse)=>{
         console.log(err.status);
         alert("error getting users")
@@ -98,8 +110,14 @@ export class RegisterComponent implements OnInit {
     })
   }
 
-  getclickedrow(userclicked:Identityuserinterface){
-    console.log('clicked user'+userclicked.userid)
+ 
+
+  edituser(usertoedit:Identityuserinterface){
+    this.updateuserform.patchValue({editname:this.usertoedit_todelete.username})
+    this.updateuserform.patchValue({editbirthday:this.usertoedit_todelete.birthday})
+  }
+  deleteuser(usertodelete:Identityuserinterface){
+    console.log("user to delete"+usertodelete.userid)
   }
 
 }
