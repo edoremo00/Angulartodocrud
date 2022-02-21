@@ -91,7 +91,6 @@
             <input type="date" class="form-control" id="birthday" placeholder="birthday" formControlName="birthday">
             <label for="birthday">birthday</label>
       </div>
-      
           <small class="registerformerrormessage" *ngIf="birthday?.errors?.['required'] && birthday?.touched">birthday is required</small>
 		      <small class="registerformerrormessage" *ngIf="birthday?.errors?.['validatedate'] && birthday?.touched">birthdaydate cannot be today</small>
 		  <!--REGISTERBUTTON-->
@@ -128,13 +127,13 @@
             <td>{{user.birthday}}</td>
             <td>{{i}}</td>
             <td>
-              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modelId" (click)="edituser(user)">edit user</button>
+              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editusermodal" (click)="edituser(user)">edit user</button>
             </td>
             <td>
-              <button class="btn btn-danger" (click)="deleteuser(user)">delete user</button>
+              <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteusermodal" (click)="deleteuser(user)">delete user</button>
             </td>
             <!-- Edit userModal -->
-              <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" (click)="oneditmodalclosed()">
+              <div class="modal fade" id="editusermodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" (click)="oneditmodalclosed()">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                   <div class="modal-content">
                       <div class="modal-header">
@@ -148,24 +147,57 @@
                           <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="editusername" placeholder="insert your username" formControlName="editname" (keydown)="premuto()">
                             <label for="editusername">username</label>
+                            <small class="registerformerrormessage" *ngIf="editname?.errors?.['required'] && editname?.touched">username is required</small>
+                            <small class="registerformerrormessage" *ngIf="editname?.errors?.['minlength'] && editname?.touched">username at least one char</small>
                           </div>
                           <div class="form-floating mb-3">
                             <input type="date" class="form-control" id="editbirthday" placeholder="insert your username" formControlName="editbirthday">
                             <label for="editbirthday">birthday</label>
+                            <small class="registerformerrormessage" *ngIf="editbirthday?.errors?.['required'] && editbirthday?.touched">birthday is required</small>
+                            <small class="registerformerrormessage" *ngIf="editbirthday?.errors?.['validatedate'] && editbirthday?.touched">birthday cannot be today</small>
                           </div>
                        </form>
                        <!--END FORM-->
                       </div>
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" (click)="test()">Save</button>
+                      <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary" id="editusersavebutton" (click)="showloadinganimation(editusersavebutton.id)" #editusersavebutton [disabled]="updateuserform.invalid">
+                        {{deleteloading? 'Loading':'Save'}}
+                        <span *ngIf="deleteloading" class="spinner-border spinner-border-sm"></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--DELETE USER MODAL-->
+              <div class="modal fade" id="deleteusermodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title">delete {{usertoedit_todelete.username}}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    <div class="modal-body">
+                      <div class="text-center biggerfont">
+                        <!--FORM-->
+                        are you sure?
+                      </div>
+                      <div class="text-center">
+                        <button type="button" class="btn btn-secondary marginbutton" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" (click)="showloadinganimation(deleteuserbutton.id,'snackbar')" id="deleteuserbutton" #deleteuserbutton>
+                           <!--[innerText]="deleteloading? 'loading' :'delete'"-->
+                           <!--Delete-->
+                           {{deleteloading? 'Loading':'Delete'}}
+                          <span *ngIf="deleteloading" class="spinner-border spinner-border-sm"></span>
+                          <div  id="snackbar" >User {{usertoedit_todelete.username}} deleted successfully</div>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
            </tr>
-          
         </tbody>
       </table>
     </div>
