@@ -17,6 +17,11 @@ export class RegisterComponent implements OnInit {
 
   usertoedit_todelete:Identityuserinterface={password:'',email:''};//per avere sempre utente cliccatoe poterlo aggiornare
 
+   deleteloading:boolean=false;
+   show_snackbar:boolean=false;
+
+ 
+  
   registerform:FormGroup=new FormGroup({
     name:new FormControl('',[Validators.required,Validators.minLength(1)]),
     lastname:new FormControl('',[Validators.required,Validators.minLength(1)]),
@@ -60,6 +65,15 @@ export class RegisterComponent implements OnInit {
 
   get birthday(){
     return this.registerform.get('birthday')
+  }
+
+  //edituserform
+  get editname(){
+    return this.updateuserform.get('editname')
+  }
+
+  get editbirthday(){
+    return this.updateuserform.get('editbirthday')
   }
 
 
@@ -112,8 +126,36 @@ export class RegisterComponent implements OnInit {
     })
   }
 
-  test():void{
-    console.log('click save')
+  showloadinganimation(elementid:string,snackbarid?:string):void{
+    let toanimatebutton:HTMLElement|null=document.getElementById(elementid);
+    if(toanimatebutton){
+      this.deleteloading=true
+      setTimeout(() => {
+        this.deleteloading=false;
+        if(snackbarid){
+          this.showsnackbar(snackbarid)
+        }
+        //QUI VERRà AGGIUNTO UNO SNACKBAR CHE DA CONFERMA A UTENTE
+      }, 2000);
+    }
+  }
+
+  showsnackbar(idsnackbar:string){
+      this.show_snackbar=true;
+      let snackbar:HTMLElement|null=document.getElementById(idsnackbar)
+      let myModalEl = document.getElementById('editusermodal');
+      if(snackbar){
+        snackbar.className="showsnackbar"
+        setTimeout(() => {
+          if(snackbar){
+            snackbar.className=""
+            if(myModalEl){
+             //codice per chiudere modal bootstrap
+            }
+          }
+          
+        }, 2000);
+      }
   }
 
   premuto():void{
@@ -121,7 +163,7 @@ export class RegisterComponent implements OnInit {
   }
 
   oneditmodalclosed(){//mostra popup di conferma
-    var myModalEl = document.getElementById('modelId');
+    var myModalEl = document.getElementById('editusermodal');
     if(myModalEl){
         myModalEl.addEventListener('hide.bs.modal', function (event) {
             let userchoice:boolean=confirm('data will be lost')
@@ -144,7 +186,20 @@ export class RegisterComponent implements OnInit {
     this.updateuserform.patchValue({editname:usertoedit.username})
     this.updateuserform.patchValue({editbirthday:usertoedit.birthday})
   }
+
+   checkifvaluehaschanged():number{
+     let fieldschanged:number=0;
+    if(this.editname?.value!==this.usertoedit_todelete.username){
+      fieldschanged++
+    }else if(this.editbirthday?.value!==this.usertoedit_todelete.birthday){
+      fieldschanged++;
+    }
+    return fieldschanged;
+   }
+
   deleteuser(usertodelete:Identityuserinterface){
+    this.usertoedit_todelete=usertodelete
+    
     console.log("user to delete"+usertodelete.userid)
   }
 
