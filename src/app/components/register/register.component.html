@@ -107,8 +107,13 @@
   <!--<hr>-->
   <div class="container-fluid">
     <div class="table-responsive">
-      <table class="table">
+      <table class="table" id="testfiltrotabella">
         <thead>
+          <div class="form-group mb-3 mt-3">
+              <input type="text" class="form-control" id="filterusers" placeholder="Search" [(ngModel)]="query" #filterusers="ngModel" >
+              <!--SFRUTTO IL TWO WAY BINDING CON NG MODEL E GLI STATUS DELL'INPUT PER MOSTRARE IL TESTO SOLO SE UTENTE HA DIGITATO QUALCOSA-->
+              <small *ngIf="checkfiltervalidity(query)===false && filterusers.touched" style="color: red;">Inserisci almeno una lettera per filtrare</small>
+          </div>
           <tr class="table-info">
             <th scope="col">#</th><!--ID-->
             <th scope="col">username</th>
@@ -117,10 +122,11 @@
             <th scope="col">index</th>
             <th scope="col">Update</th>
             <th scope="col">Delete</th>
+            <th *ngIf="users.length===0">nessun utente</th> <!--TROVARE MODO DI FARE MOSTRARE SCRITTA SE NON TROVATI RISULTATI-->
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let user of users; let i=index" ><!--(click)="getclickedrow(user)-->
+          <tr *ngFor="let user of users | searchFilter:query; let i=index" ><!--(click)="getclickedrow(user)-->
             <td>{{user.userid}}</td>
             <td>{{user.username}}</td>
             <td>{{user.email}}</td>
@@ -132,6 +138,7 @@
             <td>
               <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteusermodal" (click)="deleteuser(user)">delete user</button>
             </td>
+            
             <!-- Edit userModal -->
               <div class="modal fade" id="editusermodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" (click)="oneditmodalclosed()">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -145,7 +152,7 @@
                         <!--FORM-->
                         <form [formGroup]="updateuserform">
                           <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="editusername" placeholder="insert your username" formControlName="editname" (keydown)="premuto()">
+                            <input type="text" class="form-control" id="editusername" placeholder="insert your username" formControlName="editname">
                             <label for="editusername">username</label>
                             <small class="registerformerrormessage" *ngIf="editname?.errors?.['required'] && editname?.touched">username is required</small>
                             <small class="registerformerrormessage" *ngIf="editname?.errors?.['minlength'] && editname?.touched">username at least one char</small>
@@ -162,9 +169,12 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" id="editusersavebutton" (click)="showloadinganimation(editusersavebutton.id)" #editusersavebutton [disabled]="updateuserform.invalid">
-                        {{deleteloading? 'Loading':'Save'}}
-                        <span *ngIf="deleteloading" class="spinner-border spinner-border-sm"></span>
+                      <button type="button" class="btn btn-primary" id="editusersavebutton" (click)="Edituser()"  [disabled]="updateuserform.invalid">  <!--(click)="showloadinganimation('editusermodal','snackbar')"-->
+                        {{buttonisloading? 'Loading':'Save'}}
+                        <span *ngIf="buttonisloading" class="spinner-border spinner-border-sm"></span>
+                        <!--SNACKBAR UPDATE USER-->
+                        <div  id="snackbar">User {{usertoedit_todelete.username}} updated successfully</div>
+                        <div  id="snackbarerror">Error when updating {{usertoedit_todelete.username}} retry later</div>
                       </button>
                     </div>
                   </div>
@@ -176,21 +186,22 @@
                   <div class="modal-content">
                       <div class="modal-header">
                           <h5 class="modal-title">delete {{usertoedit_todelete.username}}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                     <div class="modal-body">
                       <div class="text-center biggerfont">
-                        <!--FORM-->
+                        <!--FORM DELETE USER-->
                         are you sure?
                       </div>
                       <div class="text-center">
                         <button type="button" class="btn btn-secondary marginbutton" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-danger" (click)="showloadinganimation(deleteuserbutton.id,'snackbar')" id="deleteuserbutton" #deleteuserbutton>
+                        <button type="button" class="btn btn-danger" (click)="showloadinganimation('deleteusermodal','snackbardelete')" id="deleteuserbutton" #deleteuserbutton>
                            <!--[innerText]="deleteloading? 'loading' :'delete'"-->
                            <!--Delete-->
-                           {{deleteloading? 'Loading':'Delete'}}
-                          <span *ngIf="deleteloading" class="spinner-border spinner-border-sm"></span>
-                          <div  id="snackbar" >User {{usertoedit_todelete.username}} deleted successfully</div>
+                           {{buttonisloading? 'Loading':'Delete'}}
+                          <span *ngIf="buttonisloading" class="spinner-border spinner-border-sm"></span>
+                          <!--SNACKBAR CUSTOM DI DELETEUSER-->
+                          <div  id="snackbardelete" >User {{usertoedit_todelete.username}} deleted successfully</div>
                         </button>
                       </div>
                     </div>
