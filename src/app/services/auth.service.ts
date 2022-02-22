@@ -34,12 +34,6 @@ export class AuthService {
     })
   }
 
-  Getall():Observable<Identityuserinterface[]>{
-    return this.http.get<Identityuserinterface[]>(`${this.userbaseurl}Getallusers`,{
-      headers:new HttpHeaders({
-        "Content-type":"application/json"
-      })
-    })
-  }
+ 
 
 }
