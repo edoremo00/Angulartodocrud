@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 import { Identityuserinterface } from 'src/interfaces/identityuserinterface';
 import { validatedate } from '../customvalidators/datevalidator';
 import { passwordandconfirmpasswequal } from '../customvalidators/passwordandconfirmpassvalidator';
@@ -17,10 +18,17 @@ export class RegisterComponent implements OnInit {
 
   usertoedit_todelete:Identityuserinterface={password:'',email:''};//per avere sempre utente cliccatoe poterlo aggiornare
 
-   deleteloading:boolean=false;
-   show_snackbar:boolean=false;
+  userupdated:Identityuserinterface={password:'',email:''}
+   buttonisloading:boolean=false;
 
- 
+  query:string="" //è il testo dell'input per filtrare
+
+  checkfiltervalidity(stringtovalidate:string):boolean{//verifica che nel filtro ci sia almeno una lettera senno mostra un messaggio
+     if(stringtovalidate.trim().length===0){
+       return false
+     }
+     return true
+  }
   
   registerform:FormGroup=new FormGroup({
     name:new FormControl('',[Validators.required,Validators.minLength(1)]),
@@ -77,9 +85,9 @@ export class RegisterComponent implements OnInit {
   }
 
 
-  //aggiungere datepicker a form e validatori in html magari uno anche custom
+  
 
-  constructor(private authservice:AuthService,private router:Router) { }
+  constructor(private authservice:AuthService,private router:Router,private userservice:UserService) { }
   users:Array<Identityuserinterface>=[];
   ngOnInit(): void {
      this.Getall()
@@ -111,13 +119,14 @@ export class RegisterComponent implements OnInit {
     })
   }
   Getall(){
-    this.authservice.Getall().subscribe({
+    this.userservice.Getall().subscribe({
       next:(getusers)=>{
-        //this.users=getusers
         this.users=getusers
         this.users.map(U=>{//trasforma data utenti formattandola
           U.birthday= moment(U.birthday).format('YYYY-MM-DD').toString()
-        })
+        });
+        //FORMATTARE DATA MAGARI CON PIPE DI ANGULAR
+        
         
       },error:(err:HttpErrorResponse)=>{
         console.log(err.status);
@@ -126,34 +135,71 @@ export class RegisterComponent implements OnInit {
     })
   }
 
-  showloadinganimation(elementid:string,snackbarid?:string):void{
-    let toanimatebutton:HTMLElement|null=document.getElementById(elementid);
-    if(toanimatebutton){
-      this.deleteloading=true
-      setTimeout(() => {
-        this.deleteloading=false;
-        if(snackbarid){
-          this.showsnackbar(snackbarid)
-        }
-        //QUI VERRà AGGIUNTO UNO SNACKBAR CHE DA CONFERMA A UTENTE
-      }, 2000);
-    }
+  Edituser(){
+    //this.editname?.value ?? this.usertoedit_todelete.username
+    //this.editbirthday?.value ?? this.usertoedit_todelete.birthday
+    //this.usertoedit_todelete.username=this.editname?.value
+    //this.usertoedit_todelete.birthday=this.editbirthday?.value
+    this.buttonisloading=true;
+    this.userupdated=this.usertoedit_todelete
+    console.log('vecchio valore',this.userupdated)
+    let vecchionome:string|undefined=this.usertoedit_todelete.username
+    let vecchiadata:string|undefined=this.usertoedit_todelete.birthday
+    this.userupdated.username=this.editname?.value
+    this.userupdated.birthday=this.editbirthday?.value
+    console.log('nuovo valore',this.userupdated)
+    //this.showloadinganimation('editusermodal','snackbar')
+    this.userservice.Update(this.userupdated)?.subscribe({
+      next:(updateduser)=>{
+        console.table(updateduser)
+      },error:(err:HttpErrorResponse)=>{
+        
+        //this.userupdated.username=this.usertoedit_todelete.username//RIASSEGNANDO VALORI COSì O CON OGGETTO DIRETTAMENTE NON VA
+        //this.userupdated.birthday=this.usertoedit_todelete.birthday
+        //this.userupdated=this.usertoedit_todelete
+        this.showsnackbar('editusermodal','snackbarerror')
+        setTimeout(() => {
+          this.userupdated.username=vecchionome//COSì FUNZIONA COME PREVISTO PERCHè?!!
+          this.userupdated.birthday=vecchiadata
+          console.log('valore errore',this.userupdated)
+          console.log(err.status)
+          this.buttonisloading=false
+         
+        }, 2000);
+      },complete:()=>{
+        setTimeout(() => {
+          this.buttonisloading=false
+          this.showsnackbar('editusermodal','snackbar')
+        }, 2000);
+      }
+    })
   }
 
-  showsnackbar(idsnackbar:string){
-      this.show_snackbar=true;
+
+
+
+
+  showloadinganimation(elementid:string,snackbarid:string):void{
+    console.table(this.usertoedit_todelete.username)
+      this.buttonisloading=true
+      setTimeout(() => {
+        this.buttonisloading=false;
+        this.showsnackbar(elementid,snackbarid)
+        
+        //QUI VERRà AGGIUNTO UNO SNACKBAR CHE DA CONFERMA A UTENTE
+      }, 2000);
+  }
+
+  showsnackbar(idcomponente:string,idsnackbar:string){
       let snackbar:HTMLElement|null=document.getElementById(idsnackbar)
-      let myModalEl = document.getElementById('editusermodal');
+      let elementtoapplysnackbar = document.getElementById(idcomponente);//modale
       if(snackbar){
         snackbar.className="showsnackbar"
         setTimeout(() => {
-          if(snackbar){
-            snackbar.className=""
-            if(myModalEl){
-             //codice per chiudere modal bootstrap
+            snackbar!.className=""
+            if(elementtoapplysnackbar){
+               //codice per chiudere modal bootstrap
             }
-          }
-          
         }, 2000);
       }
   }
@@ -163,6 +209,7 @@ export class RegisterComponent implements OnInit {
   }
 
   oneditmodalclosed(){//mostra popup di conferma
+   //MOSTRARE IL MESSAGGIO SOLO SE UTENTE HA EFFETTUATO ALMENO UNA MODIFICA
     var myModalEl = document.getElementById('editusermodal');
     if(myModalEl){
         myModalEl.addEventListener('hide.bs.modal', function (event) {
