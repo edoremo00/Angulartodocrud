@@ -7,12 +7,14 @@ import {HttpClientModule} from '@angular/common/http';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './components/register/register.component';
+import { SearchFilterPipe } from './search-filter.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomepageComponent,
-    RegisterComponent
+    RegisterComponent,
+    SearchFilterPipe
   ],
   imports: [
     BrowserModule,
