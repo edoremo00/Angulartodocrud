@@ -105,15 +105,18 @@
     </div>
   </div>
   <!--<hr>-->
-  <div class="container-fluid">
+  <div class="form-group mb-3 mt-3 filtersearchbar">
+    <i class="bi bi-search insideinputsearchicon"></i>
+    <i class="bi bi-x-circle-fill insideinput"  *ngIf="checkfiltervalidity(query)" (click)="clearfilter(filterusers)"></i>
+      <input type="text" class="form-control" id="filterusers" placeholder="Search" [(ngModel)]="query" #filterusers="ngModel" maxlength="20">
+      <!--SFRUTTO IL TWO WAY BINDING CON NG MODEL E GLI STATUS DELL'INPUT PER MOSTRARE IL TESTO SOLO SE UTENTE HA DIGITATO QUALCOSA-->
+      <small *ngIf="checkfiltervalidity(query)===false && filterusers.dirty" style="color: red;">Inserisci almeno una lettera per filtrare</small>
+  </div>
+
+ <!-- <div class="container-fluid">-->
     <div class="table-responsive">
       <table class="table" id="testfiltrotabella">
         <thead>
-          <div class="form-group mb-3 mt-3">
-              <input type="text" class="form-control" id="filterusers" placeholder="Search" [(ngModel)]="query" #filterusers="ngModel" >
-              <!--SFRUTTO IL TWO WAY BINDING CON NG MODEL E GLI STATUS DELL'INPUT PER MOSTRARE IL TESTO SOLO SE UTENTE HA DIGITATO QUALCOSA-->
-              <small *ngIf="checkfiltervalidity(query)===false && filterusers.touched" style="color: red;">Inserisci almeno una lettera per filtrare</small>
-          </div>
           <tr class="table-info">
             <th scope="col">#</th><!--ID-->
             <th scope="col">username</th>
@@ -212,7 +215,7 @@
         </tbody>
       </table>
     </div>
- </div>
+ <!--</div>-->
 
  
  
