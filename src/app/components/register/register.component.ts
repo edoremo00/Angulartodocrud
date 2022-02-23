@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { AuthService } from 'src/app/services/auth.service';
@@ -28,6 +28,16 @@ export class RegisterComponent implements OnInit {
        return false
      }
      return true
+  }
+
+  clearfilter(inputtochangestatus?:any){
+    this.query=""//reset valore filtro
+    let filterusercontrol= inputtochangestatus as NgModel
+    //filterusercontrol.control.markAsUntouched({onlySelf:true})//permette di nascondere poi messaggio di inserire una lettera per filtrare
+    filterusercontrol.control.markAsPristine({onlySelf:true})
+    //se nel template uso dirty(appena utente scrive). per non fare apparire errore bisogna resettare il campo a pristine
+
+    //se nel template uso touched(utente scrive poi esce) per non fare apparire errore bisogna resettare il campo a untouched
   }
   
   registerform:FormGroup=new FormGroup({
