@@ -1,221 +1,273 @@
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(224, 183, 183);">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">TODO Crud</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" routerLink="/home">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-          </li>
-        </ul>
-        <!--<form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-primary" type="submit">Search</button>
-        </form>-->
-      </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">TODO Crud</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/home">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
     </div>
+  </div>
 </nav>
 
-<div> 
-    <div class="card cardcentered" style="width: 40vh;">
-      <img src="..." class="card-img-top" alt="...">
-      <div class="card-body">
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <!--LOGIN FORM-->
-        <form id="registerform" [formGroup]="registerform">
-            <!--NAME-->
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="name" placeholder="insert your name" formControlName="name">
-                <label for="name">Name</label>
-            </div>
-            <small class="registerformerrormessage" *ngIf="name?.errors?.['required'] && name?.touched">name is required</small>
-            <small class="registerformerrormessage" *ngIf="name?.errors?.['minlength'] && name?.touched">name should at least have one letter</small>
-            <!--LASTNAME-->
-          <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="lastname" placeholder="insert your lastname" formControlName="lastname">
-            <label for="lastname">Lastname</label>
-          </div>
-          <small class="registerformerrormessage" *ngIf="lastname?.errors?.['minlength'] && lastname?.touched">lastname should at least have one letter</small>
-          <small class="registerformerrormessage" *ngIf="lastname?.errors?.['required'] && lastname?.touched">lastname is required</small>
-          <!--USERNAME-->
-          <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="username" placeholder="insert your username" formControlName="username">
-            <label for="username">username</label>
-          </div>
-          <small class="registerformerrormessage" *ngIf="username?.errors?.['minlength'] && username?.touched">username should at least have one letter</small>
-          <small class="registerformerrormessage" *ngIf="username?.errors?.['required'] && username?.touched">username is required</small>
-          <!--EMAIL-->
-          <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="email" placeholder="email@example.com" formControlName="email">
-            <label for="email">email</label>
-          </div>
-          <small class="registerformerrormessage" *ngIf="email?.errors?.['required'] && email?.touched">email is required</small>
-          <small class="registerformerrormessage" *ngIf="email?.errors?.['email'] && email?.touched">not a valid email</small>
-          <!--PASSWORD-->
-          <div class="form-floating">
-            <input type="password" class="form-control" id="password" placeholder="Password" formControlName="password">
-            <label for="password">Password</label>
-          </div>
-          <small class="registerformerrormessage" *ngIf="password?.errors?.['required'] && password?.touched">password is required</small>
-		  <!--CONFIRMPASSWORD-->
-		  <div class="form-floating mt-3">
-            <input type="password" class="form-control" id="confirmpassword" placeholder="confrimpassword" formControlName="confirmpassword">
-            <label for="confirmpassword">confirmpassword</label>
-          </div>
-          <small class="registerformerrormessage" *ngIf="confirmpassword?.errors?.['required'] && confirmpassword?.touched">confirmpassword is required</small>
-          <small class="registerformerrormessage" *ngIf="confirmpassword?.errors?.['minlength'] && confirmpassword?.touched">confirmpassword should at least have 6 chars</small>
-          <small class="registerformerrormessage" *ngIf="confirmpassword?.value!==password?.value">passwords do not match</small>
-		  <br>
-		  <small class="registerformerrormessage" *ngIf="confirmpassword?.errors?.['passwordandconfirmpasswequal'] && confirmpassword?.touched">password and confirmpassword are not equal</small>
-		  <!--BIRTHDAY DATE-->
-		  <div class="form-floating mt-3">
-            <input type="date" class="form-control" id="birthday" placeholder="birthday" formControlName="birthday">
-            <label for="birthday">birthday</label>
-      </div>
-          <small class="registerformerrormessage" *ngIf="birthday?.errors?.['required'] && birthday?.touched">birthday is required</small>
-		      <small class="registerformerrormessage" *ngIf="birthday?.errors?.['validatedate'] && birthday?.touched">birthdaydate cannot be today</small>
-		  <!--REGISTERBUTTON-->
-          <div class="registerbutton">
-            <button class="btn btn-primary loginbutton1" (click)="Register()" type="button" [disabled]="registerform.invalid||confirmpassword?.value!==password?.value">
-              Register
-            </button>
-          </div>
-        </form>
-        <!--END REGISTER FORM-->
-      </div>
+<div>
+  <div class="card cardcentered" style="width: 40vh;">
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-body">
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+        content.</p>
+      <!--LOGIN FORM-->
+      <form id="registerform" [formGroup]="registerform">
+        <!--NAME-->
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="name" placeholder="insert your name" formControlName="name">
+          <label for="name">Name</label>
+        </div>
+        <small class="registerformerrormessage" *ngIf="name?.errors?.['required'] && name?.touched">name is
+          required</small>
+        <small class="registerformerrormessage" *ngIf="name?.errors?.['minlength'] && name?.touched">name should at
+          least have one letter</small>
+        <!--LASTNAME-->
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="lastname" placeholder="insert your lastname"
+            formControlName="lastname">
+          <label for="lastname">Lastname</label>
+        </div>
+        <small class="registerformerrormessage" *ngIf="lastname?.errors?.['minlength'] && lastname?.touched">lastname
+          should at least have one letter</small>
+        <small class="registerformerrormessage" *ngIf="lastname?.errors?.['required'] && lastname?.touched">lastname is
+          required</small>
+        <!--USERNAME-->
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="username" placeholder="insert your username"
+            formControlName="username">
+          <label for="username">username</label>
+        </div>
+        <small class="registerformerrormessage" *ngIf="username?.errors?.['minlength'] && username?.touched">username
+          should at least have one letter</small>
+        <small class="registerformerrormessage" *ngIf="username?.errors?.['required'] && username?.touched">username is
+          required</small>
+        <!--EMAIL-->
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="email" placeholder="email@example.com" formControlName="email">
+          <label for="email">email</label>
+        </div>
+        <small class="registerformerrormessage" *ngIf="email?.errors?.['required'] && email?.touched">email is
+          required</small>
+        <small class="registerformerrormessage" *ngIf="email?.errors?.['email'] && email?.touched">not a valid
+          email</small>
+        <!--PASSWORD-->
+        <div class="form-floating">
+          <input type="password" class="form-control" id="password" placeholder="Password" formControlName="password">
+          <label for="password">Password</label>
+        </div>
+        <small class="registerformerrormessage" *ngIf="password?.errors?.['required'] && password?.touched">password is
+          required</small>
+        <!--CONFIRMPASSWORD-->
+        <div class="form-floating mt-3">
+          <input type="password" class="form-control" id="confirmpassword" placeholder="confrimpassword"
+            formControlName="confirmpassword">
+          <label for="confirmpassword">confirmpassword</label>
+        </div>
+        <small class="registerformerrormessage"
+          *ngIf="confirmpassword?.errors?.['required'] && confirmpassword?.touched">confirmpassword is required</small>
+        <small class="registerformerrormessage"
+          *ngIf="confirmpassword?.errors?.['minlength'] && confirmpassword?.touched">confirmpassword should at least
+          have 6 chars</small>
+        <small class="registerformerrormessage" *ngIf="confirmpassword?.value!==password?.value">passwords do not
+          match</small>
+        <br>
+        <small class="registerformerrormessage"
+          *ngIf="confirmpassword?.errors?.['passwordandconfirmpasswequal'] && confirmpassword?.touched">password and
+          confirmpassword are not equal</small>
+        <!--BIRTHDAY DATE-->
+        <div class="form-floating mt-3">
+          <input type="date" class="form-control" id="birthday" placeholder="birthday" formControlName="birthday">
+          <label for="birthday">birthday</label>
+        </div>
+        <small class="registerformerrormessage" *ngIf="birthday?.errors?.['required'] && birthday?.touched">birthday is
+          required</small>
+        <small class="registerformerrormessage"
+          *ngIf="birthday?.errors?.['validatedate'] && birthday?.touched">birthdaydate cannot be today</small>
+        <!--REGISTERBUTTON-->
+        <div class="registerbutton">
+          <button class="btn btn-primary loginbutton1" (click)="Register()" type="button"
+            [disabled]="registerform.invalid||confirmpassword?.value!==password?.value">
+            Register
+          </button>
+        </div>
+      </form>
+      <!--END REGISTER FORM-->
     </div>
   </div>
-  <!--<hr>-->
-  <div class="form-group mb-3 mt-3 filtersearchbar">
+</div>
+<!--<hr>-->
+<div class="form-group mb-3 mt-3 filtersearchbar">
+  <div>
     <i class="bi bi-search insideinputsearchicon"></i>
-    <i class="bi bi-x-circle-fill insideinput"  *ngIf="checkfiltervalidity(query)" (click)="clearfilter(filterusers)"></i>
-      <input type="text" class="form-control" id="filterusers" placeholder="Search" [(ngModel)]="query" #filterusers="ngModel" maxlength="20">
-      <!--SFRUTTO IL TWO WAY BINDING CON NG MODEL E GLI STATUS DELL'INPUT PER MOSTRARE IL TESTO SOLO SE UTENTE HA DIGITATO QUALCOSA-->
-      <small *ngIf="checkfiltervalidity(query)===false && filterusers.dirty" style="color: red;">Inserisci almeno una lettera per filtrare</small>
+    <i class="bi bi-x-circle-fill insideinput" *ngIf="checkfiltervalidity(query)"
+      (click)="clearfilter(filterusers)"></i>
+    <input type="text" class="form-control" id="filterusers"  placeholder="Search" [(ngModel)]="query"
+      #filterusers="ngModel" maxlength="20" (keypress)="countchars()">
+      <small class="maxlengthsearch" [ngStyle]="{'color':query.length>=20 ? 'red':'black'}">{{countchars()}}/20</small>
+      <!--NGSTYLE PERMETTE DI AGGIUNGERE CSS DINAMICAMENTE IN BASE A CONDIZIONE VARIABILE-->
+      <br>
+    <!--SFRUTTO IL TWO WAY BINDING CON NG MODEL E GLI STATUS DELL'INPUT PER MOSTRARE IL TESTO SOLO SE UTENTE HA DIGITATO QUALCOSA-->
+    <small class="filtermessage" *ngIf="!checkfiltervalidity(query) && filterusers.dirty">Inserisci almeno una
+      lettera per filtrare</small>
   </div>
+</div>
 
- <!-- <div class="container-fluid">-->
-    <div class="table-responsive">
-      <table class="table" id="testfiltrotabella">
-        <thead>
-          <tr class="table-info">
-            <th scope="col">#</th><!--ID-->
-            <th scope="col">username</th>
-            <th scope="col">email</th>
-            <th scope="col">birthday</th>
-            <th scope="col">index</th>
-            <th scope="col">Update</th>
-            <th scope="col">Delete</th>
-            <th *ngIf="users.length===0">nessun utente</th> <!--TROVARE MODO DI FARE MOSTRARE SCRITTA SE NON TROVATI RISULTATI-->
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let user of users | searchFilter:query; let i=index" ><!--(click)="getclickedrow(user)-->
-            <td>{{user.userid}}</td>
-            <td>{{user.username}}</td>
-            <td>{{user.email}}</td>
-            <td>{{user.birthday}}</td>
-            <td>{{i}}</td>
-            <td>
-              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editusermodal" (click)="edituser(user)">edit user</button>
-            </td>
-            <td>
-              <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteusermodal" (click)="deleteuser(user)">delete user</button>
-            </td>
-            
-            <!-- Edit userModal -->
-              <div class="modal fade" id="editusermodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true" (click)="oneditmodalclosed()">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                          <h5 class="modal-title">Edit {{usertoedit_todelete.username}}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="oneditmodalclosed()"></button>
-                        </div>
-                    <div class="modal-body">
-                      <div class="container-fluid">
-                        <!--FORM-->
-                        <form [formGroup]="updateuserform">
-                          <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="editusername" placeholder="insert your username" formControlName="editname">
-                            <label for="editusername">username</label>
-                            <small class="registerformerrormessage" *ngIf="editname?.errors?.['required'] && editname?.touched">username is required</small>
-                            <small class="registerformerrormessage" *ngIf="editname?.errors?.['minlength'] && editname?.touched">username at least one char</small>
-                          </div>
-                          <div class="form-floating mb-3">
-                            <input type="date" class="form-control" id="editbirthday" placeholder="insert your username" formControlName="editbirthday">
-                            <label for="editbirthday">birthday</label>
-                            <small class="registerformerrormessage" *ngIf="editbirthday?.errors?.['required'] && editbirthday?.touched">birthday is required</small>
-                            <small class="registerformerrormessage" *ngIf="editbirthday?.errors?.['validatedate'] && editbirthday?.touched">birthday cannot be today</small>
-                          </div>
-                       </form>
-                       <!--END FORM-->
-                      </div>
+<!-- <div class="container-fluid">-->
+<div class="table-responsive">
+  <div *ngIf="!shownoresultsfoundmessage(users)" style="margin:auto"> <!--mostra solo se funzione ritorna false-->
+    <h3 style="text-align: center;">no results found</h3>
+  </div>
+  <table class="table" id="testfiltrotabella" *ngIf="shownoresultsfoundmessage(users)"><!--mostra tabella se funzione ritorna true-->
+    <thead>
+      <tr class="table-info">
+        <th scope="col">#</th>
+        <!--ID-->
+        <th scope="col">username</th>
+        <th scope="col">email</th>
+        <th scope="col">birthday</th>
+        <th scope="col">Update</th>
+        <th scope="col">Delete</th>
+        <!--TROVARE MODO DI FARE MOSTRARE SCRITTA SE NON TROVATI RISULTATI-->
+      </tr>
+    </thead>
+    <tbody>  
+      <tr *ngFor="let user of users | searchFilter:query;">
+        <!--(click)="getclickedrow(user)-->
+        <td>{{user.userid}}</td>
+        <td>{{user.username}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.birthday}}</td>
+        <!--<td>{{i}}</td>-->
+        <td>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editusermodal"
+            (click)="edituser(user)">edit user</button>
+        </td>
+        <td>
+          <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteusermodal"
+            (click)="deleteuser(user)">delete user</button>
+        </td>
+        
+
+        <!-- Edit userModal -->
+        <div class="modal fade" id="editusermodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+          aria-hidden="true" (click)="oneditmodalclosed()">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Edit {{usertoedit_todelete.username}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                  (click)="oneditmodalclosed()"></button>
+              </div>
+              <div class="modal-body">
+                <div class="container-fluid">
+                  <!--FORM-->
+                  <form [formGroup]="updateuserform">
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" id="editusername" placeholder="insert your username"
+                        formControlName="editname">
+                      <label for="editusername">username</label>
+                      <small class="registerformerrormessage"
+                        *ngIf="editname?.errors?.['required'] && editname?.touched">username is required</small>
+                      <small class="registerformerrormessage"
+                        *ngIf="editname?.errors?.['minlength'] && editname?.touched">username at least one char</small>
                     </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" id="editusersavebutton" (click)="Edituser()"  [disabled]="updateuserform.invalid">  <!--(click)="showloadinganimation('editusermodal','snackbar')"-->
-                        {{buttonisloading? 'Loading':'Save'}}
-                        <span *ngIf="buttonisloading" class="spinner-border spinner-border-sm"></span>
-                        <!--SNACKBAR UPDATE USER-->
-                        <div  id="snackbar">User {{usertoedit_todelete.username}} updated successfully</div>
-                        <div  id="snackbarerror">Error when updating {{usertoedit_todelete.username}} retry later</div>
-                      </button>
+                    <div class="form-floating mb-3">
+                      <input type="date" class="form-control" id="editbirthday" placeholder="insert your username"
+                        formControlName="editbirthday">
+                      <label for="editbirthday">birthday</label>
+                      <small class="registerformerrormessage"
+                        *ngIf="editbirthday?.errors?.['required'] && editbirthday?.touched">birthday is required</small>
+                      <small class="registerformerrormessage"
+                        *ngIf="editbirthday?.errors?.['validatedate'] && editbirthday?.touched">birthday cannot be
+                        today</small>
                     </div>
-                  </div>
+                  </form>
+                  <!--END FORM-->
                 </div>
               </div>
-              <!--DELETE USER MODAL-->
-              <div class="modal fade" id="deleteusermodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                          <h5 class="modal-title">delete {{usertoedit_todelete.username}}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                    <div class="modal-body">
-                      <div class="text-center biggerfont">
-                        <!--FORM DELETE USER-->
-                        are you sure?
-                      </div>
-                      <div class="text-center">
-                        <button type="button" class="btn btn-secondary marginbutton" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-danger" (click)="showloadinganimation('deleteusermodal','snackbardelete')" id="deleteuserbutton" #deleteuserbutton>
-                           <!--[innerText]="deleteloading? 'loading' :'delete'"-->
-                           <!--Delete-->
-                           {{buttonisloading? 'Loading':'Delete'}}
-                          <span *ngIf="buttonisloading" class="spinner-border spinner-border-sm"></span>
-                          <!--SNACKBAR CUSTOM DI DELETEUSER-->
-                          <div  id="snackbardelete" >User {{usertoedit_todelete.username}} deleted successfully</div>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="editusersavebutton" (click)="Edituser()"
+                  [disabled]="updateuserform.invalid">
+                  <!--(click)="showloadinganimation('editusermodal','snackbar')"-->
+                  {{buttonisloading? 'Loading':'Save'}}
+                  <span *ngIf="buttonisloading" class="spinner-border spinner-border-sm"></span>
+                  <!--SNACKBAR UPDATE USER-->
+                  <div id="snackbar">User {{usertoedit_todelete.username}} updated successfully</div>
+                  <div id="snackbarerror">Error when updating {{usertoedit_todelete.username}} retry later</div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--DELETE USER MODAL-->
+        <div class="modal fade" id="deleteusermodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">delete {{usertoedit_todelete.username}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="text-center biggerfont">
+                  <!--FORM DELETE USER-->
+                  are you sure?
+                </div>
+                <div class="text-center">
+                  <button type="button" class="btn btn-secondary marginbutton" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-danger"
+                    (click)="showloadinganimation('deleteusermodal','snackbardelete')" id="deleteuserbutton"
+                    #deleteuserbutton>
+                    <!--[innerText]="deleteloading? 'loading' :'delete'"-->
+                    <!--Delete-->
+                    {{buttonisloading? 'Loading':'Delete'}}
+                    <span *ngIf="buttonisloading" class="spinner-border spinner-border-sm"></span>
+                    <!--SNACKBAR CUSTOM DI DELETEUSER-->
+                    <div id="snackbardelete">User {{usertoedit_todelete.username}} deleted successfully</div>
+                  </button>
                 </div>
               </div>
-           </tr>
-        </tbody>
-      </table>
-    </div>
- <!--</div>-->
+            </div>
+          </div>
+        </div>
+       
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!--</div>-->
 
  
  
