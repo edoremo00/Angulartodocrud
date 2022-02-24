@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { Identityuserinterface } from 'src/interfaces/identityuserinterface';
 import { validatedate } from '../customvalidators/datevalidator';
+import { noonlywhitespace } from '../customvalidators/noonlywhitespacesvalidator';
 import { passwordandconfirmpasswequal } from '../customvalidators/passwordandconfirmpassvalidator';
 
 @Component({
@@ -20,6 +21,8 @@ export class RegisterComponent implements OnInit {
 
   userupdated:Identityuserinterface={password:'',email:''}
    buttonisloading:boolean=false;
+
+
 
   query:string="" //è il testo dell'input per filtrare
 
@@ -35,15 +38,22 @@ export class RegisterComponent implements OnInit {
     let filterusercontrol= inputtochangestatus as NgModel
     //filterusercontrol.control.markAsUntouched({onlySelf:true})//permette di nascondere poi messaggio di inserire una lettera per filtrare
     filterusercontrol.control.markAsPristine({onlySelf:true})
+ 
+    
+    
     //se nel template uso dirty(appena utente scrive). per non fare apparire errore bisogna resettare il campo a pristine
 
     //se nel template uso touched(utente scrive poi esce) per non fare apparire errore bisogna resettare il campo a untouched
   }
+
+  countchars():number{ //used to display a number for the maximum chars allowed in the filter field
+    return this.query.length
+  }
   
   registerform:FormGroup=new FormGroup({
-    name:new FormControl('',[Validators.required,Validators.minLength(1)]),
-    lastname:new FormControl('',[Validators.required,Validators.minLength(1)]),
-    username:new FormControl('',[Validators.required,Validators.minLength(1)]),
+    name:new FormControl('',[Validators.required,Validators.minLength(1),noonlywhitespace()]),//per qualche motivo non scatta il required se ci sono solo spazi in questi campi mentre in email si
+    lastname:new FormControl('',[Validators.required,Validators.minLength(1),noonlywhitespace()]),
+    username:new FormControl('',[Validators.required,Validators.minLength(1),noonlywhitespace()]),
     email:new FormControl('',[Validators.required,Validators.email]),
     password:new FormControl('',[Validators.required,Validators.minLength(6)]),
     confirmpassword:new FormControl('',[Validators.required,Validators.minLength(6),]),//passwordandconfirmpasswequal('') custom validator
@@ -51,7 +61,7 @@ export class RegisterComponent implements OnInit {
   })
 
   updateuserform:FormGroup=new FormGroup({
-    editname:new FormControl('',[Validators.required,Validators.minLength(1)]),
+    editname:new FormControl('',[Validators.required,Validators.minLength(1),noonlywhitespace()]),
     editbirthday:new FormControl('',[Validators.required,validatedate()]),
     
 
@@ -100,7 +110,23 @@ export class RegisterComponent implements OnInit {
   constructor(private authservice:AuthService,private router:Router,private userservice:UserService) { }
   users:Array<Identityuserinterface>=[];
   ngOnInit(): void {
+    
      this.Getall()
+  }
+
+  shownoresultsfoundmessage(arrayutenti:Array<Identityuserinterface>):boolean{ //mostra il messaggio se non vengono trovati utenti
+    //in seguito a ricerca
+    if(this.query.trim().length===0){ //se stringa è solo spazi non mostrarlo
+      return true
+    }
+    //sebbene funzione filter agisca solo su username
+    //il json stringify mi da tutto l'oggetto. quindi mi restituisce true anche in casi non voluti
+    //solo perchè id utente contiene quei numeri inseriti. che non vengono mostrati 
+    //return JSON.stringify(arrayutenti.filter(x=>x.username?.toLowerCase())).includes(this.query);
+    //RISOLTO COSI SOTTO
+
+    return arrayutenti.filter(x=>x.username?.toLowerCase().includes(this.query)).length>0
+    //SE TRUE TABELLA MOSTRATA SE FALSE MOSTRATO MESSAGGIO
   }
 
   Register():void{
@@ -222,7 +248,8 @@ export class RegisterComponent implements OnInit {
    //MOSTRARE IL MESSAGGIO SOLO SE UTENTE HA EFFETTUATO ALMENO UNA MODIFICA
     var myModalEl = document.getElementById('editusermodal');
     if(myModalEl){
-        myModalEl.addEventListener('hide.bs.modal', function (event) {
+        myModalEl.addEventListener('hide.bs.modal',  (event)=> {//mettendo arrow function ho visibilità di funzione checkif value has changed
+           if(this.checkifvaluehaschanged()>0){
             let userchoice:boolean=confirm('data will be lost')
             event.stopImmediatePropagation()//se non presente qui a volte alert si triggera più volte se premuto annulla
             if(!userchoice){
@@ -231,6 +258,9 @@ export class RegisterComponent implements OnInit {
               event.stopImmediatePropagation()//faccio fare evento chiusura e stoppo propagazione in teoria
             }
            }
+        }
+          //aggiungere if con check if values chnaged && booldiduserupated
+           
       );
     }
     
@@ -245,7 +275,7 @@ export class RegisterComponent implements OnInit {
   }
 
    checkifvaluehaschanged():number{
-     let fieldschanged:number=0;
+    let fieldschanged:number=0;
     if(this.editname?.value!==this.usertoedit_todelete.username){
       fieldschanged++
     }else if(this.editbirthday?.value!==this.usertoedit_todelete.birthday){
@@ -261,3 +291,5 @@ export class RegisterComponent implements OnInit {
   }
 
 }
+
+
