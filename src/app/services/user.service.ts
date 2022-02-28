@@ -28,4 +28,10 @@ export class UserService {
       })
     })
   }
+
+  Delete(iduser:string):Observable<boolean>{
+    return this.http.delete<boolean>(`${this.userbaseurl}deleteuser/${iduser}`,{
+      
+    })
+  }
 }
