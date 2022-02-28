@@ -1,8 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { APP_BOOTSTRAP_LISTENER, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
+import { async } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { Identityuserinterface } from 'src/interfaces/identityuserinterface';
@@ -16,6 +17,12 @@ import { passwordandconfirmpasswequal } from '../customvalidators/passwordandcon
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
+  
+  @ViewChild('closedeleteusermodal', { static: false }) closedeleteusermodalref!: ElementRef<HTMLButtonElement>;
+  @ViewChild ('closeeditusermodal',{static:false}) closeeditusermodalref!:ElementRef<HTMLButtonElement>;
+  //viewchild serve per molte cose tra queste per controllare un elemento dalla classe
+  //static a false indica ad angular che rifermento a quell'elemento va aggiornata in seguito ad ngif ecc
+  
 
   usertoedit_todelete:Identityuserinterface={password:'',email:''};//per avere sempre utente cliccatoe poterlo aggiornare
 
@@ -112,6 +119,10 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     
      this.Getall()
+    
+    
+
+     
   }
 
   shownoresultsfoundmessage(arrayutenti:Array<Identityuserinterface>):boolean{ //mostra il messaggio se non vengono trovati utenti
@@ -154,16 +165,19 @@ export class RegisterComponent implements OnInit {
       }
     })
   }
+
+
   Getall(){
     this.userservice.Getall().subscribe({
       next:(getusers)=>{
         this.users=getusers
-        this.users.map(U=>{//trasforma data utenti formattandola
-          U.birthday= moment(U.birthday).format('YYYY-MM-DD').toString()
-        });
-        //FORMATTARE DATA MAGARI CON PIPE DI ANGULAR
-        
-        
+        if(this.users){ //CHECK PER EVITARE ERRORE DOPO IL REFRESH IN SEGUITO A CANCELLAZIONE UTENTE SE 
+          //NON CI SONO PIù UTENTI PRESENTI
+          this.users.map(U=>{//trasforma data utenti formattandola
+            U.birthday= moment(U.birthday).format('YYYY-MM-DD').toString()
+          })
+          //FORMATTARE DATA MAGARI CON PIPE DI ANGULAR
+        }
       },error:(err:HttpErrorResponse)=>{
         console.log(err.status);
         alert("error getting users")
@@ -172,10 +186,6 @@ export class RegisterComponent implements OnInit {
   }
 
   Edituser(){
-    //this.editname?.value ?? this.usertoedit_todelete.username
-    //this.editbirthday?.value ?? this.usertoedit_todelete.birthday
-    //this.usertoedit_todelete.username=this.editname?.value
-    //this.usertoedit_todelete.birthday=this.editbirthday?.value
     this.buttonisloading=true;
     this.userupdated=this.usertoedit_todelete
     console.log('vecchio valore',this.userupdated)
@@ -205,9 +215,46 @@ export class RegisterComponent implements OnInit {
       },complete:()=>{
         setTimeout(() => {
           this.buttonisloading=false
-          this.showsnackbar('editusermodal','snackbar')
-        }, 2000);
+          this.showsnackbar('editusermodal','snackbar').then(()=>{
+           setTimeout(() => {
+           
+             this.closeeditusermodalref.nativeElement.click()
+             this.Getall()
+           }, 2000);
+         })
+        }, 1000);
       }
+    })
+  }
+
+  Deleteuser(id:string){
+    this.buttonisloading=true
+    return this.userservice.Delete(id).subscribe({
+      next:(deleted)=>{
+        console.log(deleted)
+      },error:(err:HttpErrorResponse)=>{
+        this.showsnackbar('deleteusermodal','snackbardeleteerror')
+        console.log(err.status)
+          console.log(err.message)
+        setTimeout(() => {
+          this.buttonisloading=false
+        }, 2000);
+      },
+      complete:()=>{
+        //creo apposta delay di due secondi per mostrare effetto caricamento
+         setTimeout(() => {
+           this.buttonisloading=false
+           this.showsnackbar('deleteusermodal','snackbardelete').then(()=>{
+            setTimeout(() => {
+            
+              this.closedeleteusermodalref.nativeElement.click()
+              this.Getall()
+            }, 2000);
+          })
+         }, 1000);
+          //NB: HO RESO FUNZIONE SHOWSNACKBAR ASINCRONA IN QUANTO AL TERMINE DEI DUE SECONDI il set timeout non 
+          //aspettava il termine di essa e chiudeva direttamente la modale
+      },
     })
   }
 
@@ -215,7 +262,7 @@ export class RegisterComponent implements OnInit {
 
 
 
-  showloadinganimation(elementid:string,snackbarid:string):void{
+  showloadinganimation(elementid:string,snackbarid:string):void{ //NON PIù USATA
     console.table(this.usertoedit_todelete.username)
       this.buttonisloading=true
       setTimeout(() => {
@@ -226,17 +273,20 @@ export class RegisterComponent implements OnInit {
       }, 2000);
   }
 
-  showsnackbar(idcomponente:string,idsnackbar:string){
+ async showsnackbar(idcomponente:string,idsnackbar:string):Promise<void> {
       let snackbar:HTMLElement|null=document.getElementById(idsnackbar)
       let elementtoapplysnackbar = document.getElementById(idcomponente);//modale
       if(snackbar){
         snackbar.className="showsnackbar"
         setTimeout(() => {
             snackbar!.className=""
-            if(elementtoapplysnackbar){
+            
+            
+            
+             //elementtoapplysnackbar2.click()
                //codice per chiudere modal bootstrap
-            }
-        }, 2000);
+            
+        }, 3000);
       }
   }
 
