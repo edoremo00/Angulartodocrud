@@ -35,6 +35,8 @@
   </div>
 </nav>
 
+
+
 <div>
   <div class="card cardcentered" style="width: 40vh;">
     <img src="..." class="card-img-top" alt="...">
@@ -144,6 +146,8 @@
 </div>
 
 <!-- <div class="container-fluid">-->
+ 
+
 <div class="table-responsive">
   <div *ngIf="!shownoresultsfoundmessage(users)" style="margin:auto"> <!--mostra solo se funzione ritorna false-->
     <h3 style="text-align: center;">no results found</h3>
@@ -186,7 +190,7 @@
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title">Edit {{usertoedit_todelete.username}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                <button type="button" #closeeditusermodal class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                   (click)="oneditmodalclosed()"></button>
               </div>
               <div class="modal-body">
@@ -219,7 +223,7 @@
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="editusersavebutton" (click)="Edituser()"
-                  [disabled]="updateuserform.invalid">
+                  [disabled]="updateuserform.invalid||checkifvaluehaschanged()===0"><!--BOTTONE DISABILITATO SE ERR VALIDAZIONE O NON HAI FATTO MODIFICHE-->
                   <!--(click)="showloadinganimation('editusermodal','snackbar')"-->
                   {{buttonisloading? 'Loading':'Save'}}
                   <span *ngIf="buttonisloading" class="spinner-border spinner-border-sm"></span>
@@ -238,7 +242,7 @@
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title">delete {{usertoedit_todelete.username}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button"  #closedeleteusermodal class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 <div class="text-center biggerfont">
@@ -248,7 +252,7 @@
                 <div class="text-center">
                   <button type="button" class="btn btn-secondary marginbutton" data-bs-dismiss="modal">Close</button>
                   <button type="button" class="btn btn-danger"
-                    (click)="showloadinganimation('deleteusermodal','snackbardelete')" id="deleteuserbutton"
+                    (click)="Deleteuser(usertoedit_todelete.userid!)" id="deleteuserbutton"
                     #deleteuserbutton>
                     <!--[innerText]="deleteloading? 'loading' :'delete'"-->
                     <!--Delete-->
@@ -256,6 +260,7 @@
                     <span *ngIf="buttonisloading" class="spinner-border spinner-border-sm"></span>
                     <!--SNACKBAR CUSTOM DI DELETEUSER-->
                     <div id="snackbardelete">User {{usertoedit_todelete.username}} deleted successfully</div>
+                    <div id="snackbardeleteerror">Error when deleting {{usertoedit_todelete.username}} </div>
                   </button>
                 </div>
               </div>
