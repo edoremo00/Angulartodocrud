@@ -238,6 +238,7 @@ export class RegisterComponent implements OnInit {
           console.log(err.message)
         setTimeout(() => {
           this.buttonisloading=false
+          this.closedeleteusermodalref.nativeElement.click()
         }, 2000);
       },
       complete:()=>{
