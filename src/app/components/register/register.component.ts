@@ -174,7 +174,7 @@ export class RegisterComponent implements OnInit {
         if(this.users){ //CHECK PER EVITARE ERRORE DOPO IL REFRESH IN SEGUITO A CANCELLAZIONE UTENTE SE 
           //NON CI SONO PIù UTENTI PRESENTI
           this.users.map(U=>{//trasforma data utenti formattandola
-            U.birthday= moment(U.birthday).format('YYYY-MM-DD').toString()
+            U.birthday= moment(U.birthday).format('YYYY-MM-DD')
           })
           //FORMATTARE DATA MAGARI CON PIPE DI ANGULAR
         }
