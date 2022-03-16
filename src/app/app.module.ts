@@ -8,13 +8,17 @@ import { HomepageComponent } from './components/homepage/homepage.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './components/register/register.component';
 import { SearchFilterPipe } from './search-filter.pipe';
+import { TodoComponent } from './components/todo/todo.component';
+import { ChangetodovisualizationPipe } from './services/changetodovisualization.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomepageComponent,
     RegisterComponent,
-    SearchFilterPipe
+    SearchFilterPipe,
+    TodoComponent,
+    ChangetodovisualizationPipe
   ],
   imports: [
     BrowserModule,
