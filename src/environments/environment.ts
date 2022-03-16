@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   authbaseurl:"https://localhost:44335/api/Auth/",
-  userbaseurl:"https://localhost:44335/api/User/"
+  userbaseurl:"https://localhost:44335/api/User/",
+  todobaseurl:"https://localhost:44335/api/Todo"
 };
 
 /*
