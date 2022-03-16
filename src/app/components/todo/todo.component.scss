@@ -1,0 +1,57 @@
+.navbar {//stessa classe bootstrap con solo margin bottom in più
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 20vh;
+}
+
+#sticky-footer {
+    //flex: 1 0 auto;
+    margin-top: 90vh;
+    width: 100%;
+    position: sticky;
+    bottom: 0;
+    max-width: 100%;
+    //overflow: hidden;
+}
+
+//media query footer
+@media only screen and (min-width:0px) and (max-width:400px) {
+    #sticky-footer {
+        //flex: 1 0 auto;
+        margin-top: 200%;
+        width: 100%;
+        position: sticky;
+        bottom: 0;
+        max-width: 100%;
+        margin-right: 500%;
+      }
+}
+
+//accordion
+.accordion-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    background-color: #fff;
+    border-radius: 15px;
+    overflow-anchor: none;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,border-radius .15s ease;
+    border: 1px solid rgba(0,0,0,.125);
+}
+
+.accordion-item {
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.125);
+    margin-bottom: 15px;
+    border-radius: 15px;
+}

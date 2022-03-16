@@ -1,0 +1,108 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(224, 183, 183);">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">TODO Crud</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Dropdown
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div style="padding:25px; max-width:fit-content" > 
+    <select class="form-select" aria-label="Default select example"  [(ngModel)]="selectvalue" >
+        <option>change todo visualization</option>
+        <option value="1" >completed todos</option>
+        <option value="2">uncopleted todos</option>
+    </select>
+  </div>
+  
+
+  <!--<div id="accordion" style="padding: 25px;" *ngFor="let todo of getallusertodo, let i=index">
+    <div class="card">  
+      <div class="card-header" style="text-align: end;">
+        <a class="bi bi-chevron-down btn" data-bs-toggle="collapse" [href]="todo.id" style="align-self: flex-start;font-size:25px"></a>
+        <div style="text-align: left;">
+            <input class="form-check-input" type="checkbox" id="checkboxNoLabel" [checked]="todo.isTodoDone" aria-label="..." style="width: 20px;height:20px">
+        </div>
+        <div class="container" style="text-align: left; vertical-align:middle">
+            <p>{{i}}</p>
+            <p>{{todo.title}}</p>
+        </div>
+        <div class="container" style="text-align: end;">
+            <p>{{todo.created}}</p>
+        </div>
+      </div>
+     
+      <div [id]="todo.id" class="collapse show" data-bs-parent="#accordion">
+        <div class="card-body">
+          {{todo.description}}
+        </div>
+      </div>
+    </div>
+    
+
+  
+  </div>-->
+
+  <div class="accordion" style="padding: 25px;" id="accordionContainer">
+    <div class="accordion-item" *ngFor="let todo of getallusertodo|changetodovisualization:selectvalue;let i = index;"> <!--uso la pipe per filtrare i todo in base allo stato-->
+      <h2 class="accordion-header" [id]="'heading' + i">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i" aria-expanded="true" [attr.aria-controls]="'collapse' + i">
+         <input class="form-check-input" type="checkbox" id="checkboxNoLabel" [checked]="todo.isTodoDone" aria-label="..." style="width: 20px;height:20px;margin-right:20px" (click)="clickedbutton($event,todo)">
+         {{ todo.title }}
+        </button>
+      </h2>
+      <div [id]="'collapse' + i" class="accordion-collapse collapse show" [attr.aria-labelledby]="'heading' + i"
+        data-bs-parent="#accordionContainer">
+        <div class="accordion-body">
+          <p>
+            {{ todo.description }}
+          </p>
+          <div class="container">
+            <button class="btn btn-primary" style="margin-right: 10px;">edit</button>
+            <button class="btn btn-danger">delete</button>
+          </div>
+        </div>
+        <div class="container" style="text-align: end;">
+            <p>last modified: {{todo.lastmodified}}</p>
+        </div>
+      </div>
+     
+    </div>
+   
+    
+  </div>
+
+  
+<footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white-50 sticky-top">
+    <div class="container text-center">
+      <small>Copyright &copy; Your Website</small>
+    </div>
+</footer>
