@@ -18,7 +18,15 @@ export class TodoService {
       headers:new HttpHeaders({
         "Content-type":"application/json"
       }),
-      params:new HttpParams().set('foruserid',foruserid)//setto  i Aparametri in querystring
+      params:new HttpParams().set('foruserid',foruserid)//setto  i parametri in querystring
+    })
+  }
+
+  UpdateTodo(todotoupdate:Itodointerface):Observable<Itodointerface|null>{
+    return this.http.put<Itodointerface|null>(`${this.todobaseurl}/Updatetodo`,todotoupdate,{
+      headers:new HttpHeaders({
+        "Content-type":"application/json"
+      })
     })
   }
 }
