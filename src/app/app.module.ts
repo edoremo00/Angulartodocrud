@@ -7,9 +7,11 @@ import {HttpClientModule} from '@angular/common/http';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './components/register/register.component';
-import { SearchFilterPipe } from './search-filter.pipe';
+
 import { TodoComponent } from './components/todo/todo.component';
-import { ChangetodovisualizationPipe } from './services/changetodovisualization.pipe';
+import { ChangetodovisualizationPipe } from './pipes/changetodovisualization.pipe';
+import { SearchFilterPipe } from './pipes/search-filter.pipe';
+import { TodofilterPipe } from './pipes/todofilter.pipe';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import { ChangetodovisualizationPipe } from './services/changetodovisualization.
     RegisterComponent,
     SearchFilterPipe,
     TodoComponent,
-    ChangetodovisualizationPipe
+    ChangetodovisualizationPipe,
+    TodofilterPipe
   ],
   imports: [
     BrowserModule,
