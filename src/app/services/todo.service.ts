@@ -29,4 +29,13 @@ export class TodoService {
       })
     })
   }
+
+
+  DeleteTodo(id:number):Observable<boolean>{
+    return this.http.delete<boolean>(`${this.todobaseurl}/DeleteTodo/${id}`,{
+      headers:new HttpHeaders({
+        "Content-type":"application/json"
+      })
+    })
+  }
 }
