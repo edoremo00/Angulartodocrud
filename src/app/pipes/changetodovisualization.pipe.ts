@@ -10,7 +10,10 @@ export class ChangetodovisualizationPipe implements PipeTransform { //pipe per m
   transform(value: Array<Itodointerface>, args?: string): Itodointerface[] {
     if(!args){
       return value
-    }else if(args==="1"){
+    }else if(args==="0"){
+      return value
+    }
+    else if(args==="1"){
       return value.filter(x=>x.isTodoDone)
     }else{
       return value.filter(x=>!x.isTodoDone)
