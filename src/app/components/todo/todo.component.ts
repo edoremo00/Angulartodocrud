@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { TodoService } from 'src/app/services/todo.service';
 import { Itodointerface } from 'src/interfaces/todointeerface';
@@ -13,10 +13,13 @@ import { noonlywhitespace } from '../customvalidators/noonlywhitespacesvalidator
 })
 export class TodoComponent implements OnInit {
 
+  
+  
   foruserid:string="a9b1a280-2a47-4aea-ad5d-e9217549a119"
   todotitle:string="";
+  filterquery:string="";
   testcheckbox:boolean=true;
-  selectvalue:string="2";//qui setto valore selected del tag select senno è vuoto quindi undefined per qualche motivo
+  selectvalue:string="0";//qui setto valore selected del tag select senno è vuoto quindi undefined per qualche motivo
   //questo perchè ngmodel sovrascrive il valore di default
   buttonisloading:boolean=false;
 
@@ -26,13 +29,21 @@ export class TodoComponent implements OnInit {
     todoisdone:new FormControl('')
   })
 
+   //snackbarstriggered:Array<string>
+
+  
+
+  
+
   
   
 
   getallusertodo:Array<Itodointerface>;
   constructor(private todoservice:TodoService) {
     this.getallusertodo=[];
+    //this.snackbarstriggered=[]
   }
+
 
   get todotitlevalue():AbstractControl|null{
     return this.updatetodoform.get('todotitle')
@@ -51,15 +62,22 @@ export class TodoComponent implements OnInit {
   }
 
   //quando clicco la checkbox
-  clickedbutton(e:Event,todo:Itodointerface){
+  togglecheckbox(e:Event,todo:Itodointerface){
+    debugger
     let element:HTMLElement=e.target as HTMLElement;
     //controllo che chi ha scatenato evento è la checkbox
     if(element.tagName==="INPUT"){
       e.stopImmediatePropagation()
-      console.log((element as HTMLInputElement).checked)
-      todo.isTodoDone=(element as HTMLInputElement).checked
+     let checkbox:HTMLInputElement=element as HTMLInputElement
+      todo.isTodoDone=checkbox.checked
       this.patchformvalue(todo)//senno con binding form angular resetta valore titolo e descrizione a valore di default
       this.Updatetodo(todo)//a questo punto chiamo la put
+      if(checkbox.checked){
+        this.showsnackbar2('snackbardone')
+        
+      }else{
+        this.showsnackbar2("snackbarundone")
+      }
     }
   }
 
@@ -92,8 +110,7 @@ export class TodoComponent implements OnInit {
     this.todotitle=todo.title
   }
 
-  oneditmodalclosed(todo:Itodointerface){//mostra popup di conferma
-    //MOSTRARE IL MESSAGGIO SOLO SE UTENTE HA EFFETTUATO ALMENO UNA MODIFICA
+  oneditmodalclosed(){
      var myModalEl = document.getElementById('edittodomodal');
      if(myModalEl){
          myModalEl.addEventListener('hide.bs.modal',  (event)=> {
@@ -104,6 +121,113 @@ export class TodoComponent implements OnInit {
      }
      
    }
+
+   //questa funzione serve per mostrare messaggio se filtro barra
+   //di ricerca non trova nulla accoppiato con filtro visualizzazione select
+   shownoresultsfoundmessage(todo:Itodointerface[],selectvalue:any,filterquery:string):boolean{
+     if(filterquery!==""){//questo if serve per evitare che ngif sia true per qualche secondo
+      //questo perchè la get all viene eseguita nell'oninit
+      if(selectvalue==="0"){
+        return  todo.filter(x=>{
+          return x.title.toLowerCase().includes(filterquery.trim())
+         }).length>0
+        }else if(selectvalue==="1"){
+          return todo.filter(x=>{
+            return x.title.toLowerCase().includes(filterquery.trim()) && x.isTodoDone
+          }).length>0
+        }else{
+         return todo.filter(x=>{
+          return x.title.toLowerCase().includes(filterquery.trim()) && !x.isTodoDone
+         }).length>0
+        }
+      }
+      return true
+     
+   }
+
+   //problema quando più todo vengono selezionati mentre animazione snackbar è in corso
+   //viene mostrata solo per il primo elemento cliccato
+    showsnackbar(idsnackbar:string,idcomponente?:string|any){
+    //this.snackbarstriggered.push(idsnackbar)
+    
+    //this.snackbarstriggered.push(idsnackbar)
+    //debugger;
+    let snackbar:HTMLElement|null=document.getElementById(idsnackbar)
+     //let elementtoapplysnackbar = document.getElementById(idcomponente);//modale
+    if(snackbar){
+      snackbar.className="showsnackbar"
+     
+      setTimeout(() => {
+          snackbar!.className=""
+          //let elementtoremovefromlist= this.snackbarstriggered.indexOf(this.snackbarstriggered.find(x=>x===idsnackbar)!)
+          //console.log("elemento da rimuovere "+elementtoremovefromlist)
+           
+       
+          //elementtoapplysnackbar?.click()
+          
+          
+           //elementtoapplysnackbar2.click()
+             //codice per chiudere modal bootstrap
+          
+      }, 3000);
+    }
+    
+  }
+
+
+   showsnackbar2(idsnackbar:string,idcomponente?:string|any) {
+  
+    //this.snackbarstriggered.push(idsnackbar)
+    //debugger;
+    let snackbar:HTMLElement|null=document.getElementById(idsnackbar)
+     //let elementtoapplysnackbar = document.getElementById(idcomponente);//modale
+    if(snackbar){
+      snackbar.className="showsnackbar"
+     
+      setTimeout(() => {
+          snackbar!.className=""
+          //let elementtoremovefromlist= this.snackbarstriggered.indexOf(this.snackbarstriggered.find(x=>x===idsnackbar)!)
+           
+          //this.snackbarstriggered.splice(elementtoremovefromlist,1)
+          //elementtoapplysnackbar?.click()
+          
+          
+           //elementtoapplysnackbar2.click()
+             //codice per chiudere modal bootstrap
+          
+      }, 3000);
+    }
+    /*if(this.snackbarstriggered.length!==0){
+      this.snackbarstriggered.map(x=> this.showsnackbar(x))
+    }*/
+  }
+
+  
+
+
+   checkfiltervalidity(stringtovalidate:string):boolean{//verifica che nel filtro ci sia almeno una lettera senno mostra un messaggio
+    if(stringtovalidate.trim().length===0){
+      return false
+    }
+    return true
+  }
+
+  clearfilter(inputtochangestatus?:any){
+    this.filterquery=""//reset valore filtro
+    let filterusercontrol= inputtochangestatus as NgModel
+    //filterusercontrol.control.markAsUntouched({onlySelf:true})//permette di nascondere poi messaggio di inserire una lettera per filtrare
+    filterusercontrol.control.markAsPristine({onlySelf:true})
+ 
+    
+    
+    //se nel template uso dirty(appena utente scrive). per non fare apparire errore bisogna resettare il campo a pristine
+
+    //se nel template uso touched(utente scrive poi esce) per non fare apparire errore bisogna resettare il campo a untouched
+  }
+
+  countchars():number{ //used to display a number for the maximum chars allowed in the filter field
+    return this.filterquery.length
+  }
 
    Updatetodo(todotoupdate:Itodointerface){
      let valuesbeforeupdate:Itodointerface=todotoupdate;
@@ -128,6 +252,19 @@ export class TodoComponent implements OnInit {
          this.updatetodoform.patchValue({tododescription:olddescription})
          todotoupdate.isTodoDone=!oldtodoisdone
          todotoupdate.lastmodified=moment(oldlastmodifieddate).format('YYYY-MM-DD hh:mm')
+       }
+     })
+   }
+
+   Deletetodo(id:number){
+     return this.todoservice.DeleteTodo(id).subscribe({
+       next:(t)=>{
+         console.log("deleted todo",t)
+       },complete:()=>{
+
+       },error:(err:HttpErrorResponse)=>{
+         alert('error in deleting todo')
+         console.error(err.message)
        }
      })
    }
