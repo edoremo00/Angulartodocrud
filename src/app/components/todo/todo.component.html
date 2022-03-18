@@ -35,49 +35,41 @@
     </div>
   </nav>
 
+  <div class="form-group mb-3 mt-3 filtersearchbar">
+    <div>
+      <i class="bi bi-search insideinputsearchicon"></i>
+      <i class="bi bi-x-circle-fill insideinput" *ngIf="checkfiltervalidity(filterquery)"
+        (click)="clearfilter(filtertodo)"></i>
+      <input type="text" class="form-control" id="filtertodo"  placeholder="Search" [(ngModel)]="filterquery"
+        #filtertodo="ngModel" maxlength="20" (keypress)="countchars()">
+        <small class="maxlengthsearch" [ngStyle]="{'color':filterquery.length>=20 ? 'red':'black'}">{{countchars()}}/20</small>
+        <!--NGSTYLE PERMETTE DI AGGIUNGERE CSS DINAMICAMENTE IN BASE A CONDIZIONE VARIABILE-->
+        <br>
+      <!--SFRUTTO IL TWO WAY BINDING CON NG MODEL E GLI STATUS DELL'INPUT PER MOSTRARE IL TESTO SOLO SE UTENTE HA DIGITATO QUALCOSA-->
+      <small class="filtermessage" *ngIf="!checkfiltervalidity(filterquery) && filtertodo.dirty">Inserisci almeno una
+        lettera per filtrare</small>
+    
+    </div>
+  </div>
+  
+
   <div style="padding:25px; max-width:fit-content" > 
-    <select class="form-select" aria-label="Default select example"  [(ngModel)]="selectvalue" >
+    <select class="form-select" aria-label="Default select example" [(ngModel)]="selectvalue">
+        <option value="0">All todos</option>
         <option value="1" >completed todos</option>
         <option value="2">uncompleted todos</option>
     </select>
   </div>
+  <h2 class="noresultsmessage" *ngIf="shownoresultsfoundmessage(getallusertodo,selectvalue,filterquery)===false">no results</h2>
   
-
-  <!--<div id="accordion" style="padding: 25px;" *ngFor="let todo of getallusertodo, let i=index">
-    <div class="card">  
-      <div class="card-header" style="text-align: end;">
-        <a class="bi bi-chevron-down btn" data-bs-toggle="collapse" [href]="todo.id" style="align-self: flex-start;font-size:25px"></a>
-        <div style="text-align: left;">
-            <input class="form-check-input" type="checkbox" id="checkboxNoLabel" [checked]="todo.isTodoDone" aria-label="..." style="width: 20px;height:20px">
-        </div>
-        <div class="container" style="text-align: left; vertical-align:middle">
-            <p>{{i}}</p>
-            <p>{{todo.title}}</p>
-        </div>
-        <div class="container" style="text-align: end;">
-            <p>{{todo.created}}</p>
-        </div>
-      </div>
-     
-      <div [id]="todo.id" class="collapse show" data-bs-parent="#accordion">
-        <div class="card-body">
-          {{todo.description}}
-        </div>
-      </div>
-    </div>
-    
-
-  
-  </div>-->
-
   <div class="accordion" style="padding: 25px;" id="accordionContainer">
-    <div class="accordion-item" *ngFor="let todo of getallusertodo|changetodovisualization:selectvalue;let i = index;">
+    <div class="accordion-item" *ngFor="let todo of getallusertodo|changetodovisualization:selectvalue|todofilter:filterquery;let i = index;">
       <!--uso la pipe per filtrare i todo in base allo stato-->
       <h2 class="accordion-header" [id]="'heading' + i">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i"
           aria-expanded="true" [attr.aria-controls]="'collapse' + i">
           <input class="form-check-input" type="checkbox" id="checkboxNoLabel" [checked]="todo.isTodoDone"
-            aria-label="..." style="width: 20px;height:20px;margin-right:20px" (click)="clickedbutton($event,todo)" >
+            aria-label="..." style="width: 20px;height:20px;margin-right:20px" (click)="togglecheckbox($event,todo)" >
           {{ todo.title }}
         </button>
       </h2>
@@ -90,16 +82,19 @@
           <div class="container">
             <button class="btn btn-primary" style="margin-right: 10px;" data-bs-toggle="modal"
               data-bs-target="#edittodomodal" (click)="patchformvalue(todo)" #todotest>edit</button>
-            <button class="btn btn-danger">delete</button>
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletetodomodal">delete</button>
           </div>
         </div>
         <div class="container" style="text-align: end;">
           <p>last modified: {{todo.lastmodified}}</p>
         </div>
       </div>
+      <div id="snackbardone">Todo marked as done</div>
+      <div id="snackbarundone">Todo marked as undone</div>
+      <div id="snackbarerror">unable to change todo status</div>
      <!--EDIT TODO MODAL-->
       <div class="modal fade" id="edittodomodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-        aria-hidden="true" (click)="oneditmodalclosed(todo)">
+        aria-hidden="true" (click)="oneditmodalclosed()">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -126,16 +121,13 @@
                   <small class="updatetodoformerrormessage" *ngIf="tododescriptionvalue?.errors?.['noonlywhitespace'] && tododescriptionvalue?.dirty">
                      description cannot be blank
                   </small>
-
-                  <small class="registerformerrormessage">
-                  </small>
                   </div>
                 </form>
                 <!--END FORM-->
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="oneditmodalclosed(todo)">Close</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="oneditmodalclosed()">Close</button>
               <button type="button" [disabled]="updatetodoform.invalid || !updatetodoform.dirty" class="btn btn-primary" id="edittodosavebutton" (click)="Updatetodo(todo)">
                 
                 <!--BOTTONE DISABILITATO SE ERR VALIDAZIONE O NON HAI FATTO MODIFICHE-->
@@ -143,21 +135,50 @@
                 {{buttonisloading? 'Loading':'Save'}}
                 <span *ngIf="buttonisloading" class="spinner-border spinner-border-sm"></span>
                 <!--SNACKBAR UPDATE USER-->
-                <div id="snackbar">Todo updated successfully</div>
-                <div id="snackbarerror">Error when updating retry later</div>
+                
               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--DELETE TODO MODAL-->
+      <div class="modal fade" id="deletetodomodal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">delete {{todo.title}}</h5>
+              <button type="button" #closedeletetodomodal class="btn-close" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="text-center biggerfont">
+                <!--FORM DELETE USER-->
+                are you sure?
+              </div>
+              <div class="text-center">
+                <button type="button" class="btn btn-secondary marginbutton" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" (click)="Deletetodo(todo.id)" id="deletetodobutton"
+                  #deletetodobutton>
+                  <!--[innerText]="deleteloading? 'loading' :'delete'"-->
+                  <!--Delete-->
+                  {{buttonisloading? 'Loading':'Delete'}}
+                  <span *ngIf="buttonisloading" class="spinner-border spinner-border-sm"></span>
+                  <!--SNACKBAR CUSTOM DI DELETETODO-->
+                  <div id="snackbardelete">Todo {{todo.title}} deleted successfully</div>
+                  <div id="snackbardeleteerror">Error when deleting {{todo.title}} </div>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  
-
-  
+  <div id="snackbar">Todo updated successfully</div>
+  <div id="snackbarerror">Error when updating retry later</div>
 <footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white-50 sticky-top">
     <div class="container text-center">
-      <small>Copyright &copy; Your Website</small>
+      <small>Copyright&copy; Your Website</small>
     </div>
 </footer>

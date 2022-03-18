@@ -6,7 +6,7 @@
     justify-content: space-between;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
-    margin-bottom: 20vh;
+    //margin-bottom: 20vh;
 }
 
 #sticky-footer {
@@ -28,7 +28,7 @@
         position: sticky;
         bottom: 0;
         max-width: 100%;
-        margin-right: 500%;
+        //margin-right: 500%;
       }
 }
 
@@ -69,7 +69,7 @@
 }
 
 /* The snackbar - position it at the bottom and in the middle of the screen */
-#snackbar,#snackbardelete {
+#snackbar,#snackbardelete,#snackbardone,#snackbarundone {
     visibility: hidden; /* Hidden by default. Visible on click */
     min-width: 250px; /* Set a default minimum width */
     margin-left: -150px; /* Divide value of min-width by 2 */
@@ -81,12 +81,12 @@
     position: fixed; /* Sit on top of the screen */
     z-index: 1; /* Add a z-index if needed */
     left: 50%; /* Center the snackbar */
-    bottom: 30px; /* 30px from the bottom */
+    bottom: 80px; /* 30px from the bottom */
     border-radius: 10px;
   }
   
   /* Show the snackbar when clicking on a button (class added with JavaScript) */
-  #snackbar.showsnackbar,#snackbardelete.showsnackbar,#snackbarerror.showsnackbar,#snackbardeleteerror.showsnackbar {
+  #snackbar.showsnackbar,#snackbardelete.showsnackbar,#snackbarerror.showsnackbar,#snackbardeleteerror.showsnackbar,#snackbardone.showsnackbar,#snackbarundone.showsnackbar {
     visibility: visible; /* Show the snackbar */
     /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
     However, delay the fade out process for 2.5 seconds */
@@ -130,3 +130,73 @@
     bottom: 30px; /* 30px from the bottom */
     border-radius: 10px;
   }
+
+
+    //classe css per inserire x rossa all'interno dell'input di ricerca utenti
+    .insideinput{
+      //padding-left: 10px;
+      //margin-right: 20px;
+      //box-sizing: border-box;
+      position: relative; left: 80%; bottom: -35px; color: red;
+      font-size: 20px;
+      
+  
+    }
+  
+    .insideinput:hover{
+      cursor: pointer;
+    }
+  
+    .insideinputsearchicon{
+      position: relative;
+      top: 35px;
+      left:2px;
+      font-size: 20px;
+    }
+  
+   
+  
+    /*#filterusers::placeholder{
+      padding-left: 20px;
+      text-align: left;
+     
+    }*/
+  
+    #filtertodo{
+     text-align: left;
+     
+    }
+  
+   
+  
+   .filtersearchbar{
+        display: flex;
+        flex-direction: row;
+        margin-left: 25px;
+        
+    }
+
+    
+#filtertodo.form-control{//per icona search per rimuovere problema lettere sopra
+  padding-left: 2.375rem;
+}
+
+#filtertodo.form-control{//icona x idem sopra
+  padding-right: 2.375rem;
+}
+
+.maxlengthsearch{//numeri lunghezza massima stringa ricerca
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.marginbutton {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+  margin-right: 50px;
+}
+
+.noresultsmessage{
+  text-align: center;
+}
