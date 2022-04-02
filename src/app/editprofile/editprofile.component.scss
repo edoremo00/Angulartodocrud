@@ -1,0 +1,56 @@
+#sticky-footer {
+    //flex: 1 0 auto;
+    margin-top: 90vh;
+    width: 100%;
+    position: sticky;
+    bottom: 0;
+    max-width: 100%;
+    //overflow: hidden;
+}
+
+//media query footer
+@media only screen and (min-width:0px) and (max-width:400px) {
+    #sticky-footer {
+        //flex: 1 0 auto;
+        margin-top: 200%;
+        width: 100%;
+        position: sticky;
+        bottom: 0;
+        max-width: 100%;
+        //margin-right: 500%;
+      }
+}
+
+@media only screen and (min-width:0px) and (max-width:900px) {
+   div.test{
+       width: auto;
+       margin-top: 10vh;
+       //align-items: center;
+       margin-left: 10px;
+       margin-right: 10px;
+       
+     
+   }
+}
+
+@media only screen and (min-width:900px) {
+    div.test{
+        margin-top:5vh;margin-left:20rem; margin-right:2rem; 
+    }
+}
+
+.savebutton{
+    margin-top: 3rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    text-align: center;
+    width: 50%;
+    margin-left: 25%;
+    word-wrap: break-word;
+    align-items: center;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+}

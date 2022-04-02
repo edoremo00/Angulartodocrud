@@ -12,6 +12,7 @@ import { TodoComponent } from './components/todo/todo.component';
 import { ChangetodovisualizationPipe } from './pipes/changetodovisualization.pipe';
 import { SearchFilterPipe } from './pipes/search-filter.pipe';
 import { TodofilterPipe } from './pipes/todofilter.pipe';
+import { EditprofileComponent } from './editprofile/editprofile.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { TodofilterPipe } from './pipes/todofilter.pipe';
     SearchFilterPipe,
     TodoComponent,
     ChangetodovisualizationPipe,
-    TodofilterPipe
+    TodofilterPipe,
+    EditprofileComponent
   ],
   imports: [
     BrowserModule,
