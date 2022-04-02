@@ -90,6 +90,8 @@
         </div>
         <small class="registerformerrormessage" *ngIf="password?.errors?.['required'] && password?.touched">password is
           required</small>
+          <small class="registerformerrormessage" *ngIf="password?.errors?.['passwordcomplexity'] && password?.touched">password doesn't 
+          match security criteria  </small>
         <!--CONFIRMPASSWORD-->
         <div class="form-floating mt-3">
           <input type="password" class="form-control" id="confirmpassword" placeholder="confrimpassword"
@@ -103,6 +105,8 @@
           have 6 chars</small>
         <small class="registerformerrormessage" *ngIf="confirmpassword?.value!==password?.value">passwords do not
           match</small>
+        <small class="registerformerrormessage" *ngIf="confirmpassword?.errors?.['passwordcomplexity'] && confirmpassword?.touched">confirmpassword doesn't 
+          match security criteria  </small>
         <br>
         <small class="registerformerrormessage"
           *ngIf="confirmpassword?.errors?.['passwordandconfirmpasswequal'] && confirmpassword?.touched">password and

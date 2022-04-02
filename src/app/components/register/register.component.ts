@@ -10,6 +10,7 @@ import { Identityuserinterface } from 'src/interfaces/identityuserinterface';
 import { validatedate } from '../customvalidators/datevalidator';
 import { noonlywhitespace } from '../customvalidators/noonlywhitespacesvalidator';
 import { passwordandconfirmpasswequal } from '../customvalidators/passwordandconfirmpassvalidator';
+import { validatePasswordComplexity } from '../customvalidators/passwordcomplexityvalidator';
 
 @Component({
   selector: 'app-register',
@@ -62,8 +63,8 @@ export class RegisterComponent implements OnInit {
     lastname:new FormControl('',[Validators.required,Validators.minLength(1),noonlywhitespace()]),
     username:new FormControl('',[Validators.required,Validators.minLength(1),noonlywhitespace()]),
     email:new FormControl('',[Validators.required,Validators.email]),
-    password:new FormControl('',[Validators.required,Validators.minLength(6)]),
-    confirmpassword:new FormControl('',[Validators.required,Validators.minLength(6),]),//passwordandconfirmpasswequal('') custom validator
+    password:new FormControl('',[Validators.required,Validators.minLength(6),validatePasswordComplexity()]),
+    confirmpassword:new FormControl('',[Validators.required,Validators.minLength(6),validatePasswordComplexity()]),//passwordandconfirmpasswequal('') custom validator
     birthday:new FormControl('',[Validators.required,validatedate()])
   })
 
