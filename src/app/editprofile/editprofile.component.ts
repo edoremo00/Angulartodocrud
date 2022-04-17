@@ -18,11 +18,21 @@ export class EditprofileComponent implements OnInit,AfterViewInit {
 
   
 
-  Onfileselected(){
+  async Onfileselected():Promise<void>{
     if(this.inputfile){
       let input=this.inputfile as HTMLInputElement
       let file=input.files
-      console.log(file)
+      if(file){
+        console.log(file)
+        let formdata=new FormData()
+        formdata.append('file',file[0])
+        await fetch('https://localhost:44335/api/Uploadfiles/Uploadfile',{
+          method:'POST',
+          body:formdata,
+          
+        })
+      }
+     
     }
   }
 
