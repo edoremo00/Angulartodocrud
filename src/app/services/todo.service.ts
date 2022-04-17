@@ -22,6 +22,15 @@ export class TodoService {
     })
   }
 
+  GetallusertodoforExternalLogin(foruserid:string,Isexternalloginprovider:boolean):Observable<Itodointerface[]>{
+    return this.http.get<Itodointerface[]>(`${this.todobaseurl}/Getallusertodo`,{
+      headers:new HttpHeaders({
+        "Content-type":"application/json"
+      }),
+      params:new HttpParams().set('foruserid',foruserid).append('externalloginuser',Isexternalloginprovider)
+    })
+  }
+
   UpdateTodo(todotoupdate:Itodointerface):Observable<Itodointerface|null>{
     return this.http.put<Itodointerface|null>(`${this.todobaseurl}/Updatetodo`,todotoupdate,{
       headers:new HttpHeaders({
