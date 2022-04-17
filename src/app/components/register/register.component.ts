@@ -1,10 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { APP_BOOTSTRAP_LISTENER, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { APP_BOOTSTRAP_LISTENER, ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
-import { async } from 'rxjs';
+import { async, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
+import { GoogleService } from 'src/app/services/google.service';
 import { UserService } from 'src/app/services/user.service';
 import { Identityuserinterface } from 'src/interfaces/identityuserinterface';
 import { validatedate } from '../customvalidators/datevalidator';
@@ -17,12 +18,16 @@ import { validatePasswordComplexity } from '../customvalidators/passwordcomplexi
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit,OnDestroy {
   
   @ViewChild('closedeleteusermodal', { static: false }) closedeleteusermodalref!: ElementRef<HTMLButtonElement>;
   @ViewChild ('closeeditusermodal',{static:false}) closeeditusermodalref!:ElementRef<HTMLButtonElement>;
   //viewchild serve per molte cose tra queste per controllare un elemento dalla classe
   //static a false indica ad angular che rifermento a quell'elemento va aggiornata in seguito ad ngif ecc
+
+  loggedGoogleuser:any
+
+  googleuserservicesubscription:Subscription=new Subscription()//lo uso per disiscirvermi da observable
   
 
   usertoedit_todelete:Identityuserinterface={password:'',email:''};//per avere sempre utente cliccatoe poterlo aggiornare
@@ -115,15 +120,39 @@ export class RegisterComponent implements OnInit {
 
   
 
-  constructor(private authservice:AuthService,private router:Router,private userservice:UserService) { }
+  constructor(private authservice:AuthService,private router:Router,private ngzone:NgZone,private userservice:UserService,private googleservice:GoogleService,private ref:ChangeDetectorRef) { }
+  ngOnDestroy(): void {
+    //console.log('rimossa subscription')
+    this.googleuserservicesubscription.unsubscribe()
+    
+  }
   users:Array<Identityuserinterface>=[];
   ngOnInit(): void {
     
      this.Getall()
+    this.googleuserservicesubscription= this.googleservice.observable().subscribe({
+       next:(googleuser)=>{
+         if(googleuser){//solo se ho utente
+          this.loggedGoogleuser=googleuser?.getBasicProfile().getEmail()
+          
+         }
+        //this.loggedGoogleuser=googleuser?.getBasicProfile().getEmail()
+        this.ref.detectChanges()//ascolto sempre i cambiamenti
+        
+       }
+     })/*user=>{
+       this.loggedGoogleuser=user?.getBasicProfile().getEmail()
+       console.log('infoutente', this.loggedGoogleuser)
+       this.ref.detectChanges()//. questo osservo cambiamenti a utente loggato. se fa logout sarà null sennò avrò nuovo valore ecc
+     })*/
     
     
 
      
+  }
+
+  signin(){//login con Google
+    this.googleservice.signIn()
   }
 
   shownoresultsfoundmessage(arrayutenti:Array<Identityuserinterface>):boolean{ //mostra il messaggio se non vengono trovati utenti

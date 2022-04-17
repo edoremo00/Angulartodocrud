@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, NgModel, Validators } from '@angular/forms';
 import * as moment from 'moment';
+import { GoogleService } from 'src/app/services/google.service';
 import { TodoService } from 'src/app/services/todo.service';
 import { Itodointerface } from 'src/interfaces/todointeerface';
 import { noonlywhitespace } from '../customvalidators/noonlywhitespacesvalidator';
@@ -16,6 +17,8 @@ export class TodoComponent implements OnInit {
   
   
   foruserid:string="a9b1a280-2a47-4aea-ad5d-e9217549a119"
+  googleuseremail:any
+  googleuserprofilepic:any
   todotitle:string="";
   filterquery:string="";
   testcheckbox:boolean=true;
@@ -39,9 +42,14 @@ export class TodoComponent implements OnInit {
   
 
   getallusertodo:Array<Itodointerface>;
-  constructor(private todoservice:TodoService) {
+  constructor(private todoservice:TodoService,private googleservice:GoogleService) {
     this.getallusertodo=[];
     //this.snackbarstriggered=[]
+  }
+
+  //Logout google
+  SignOutGoogle(){
+    this.googleservice.signOut()
   }
 
 
@@ -58,7 +66,37 @@ export class TodoComponent implements OnInit {
   }
    
   ngOnInit(): void {
-    this.Getallusertodo(this.foruserid)
+    debugger
+    /*this.googleservice.observable().subscribe({
+      next:((user)=>{
+        if(user){
+          
+          this.googleuseremail=user.getBasicProfile().getEmail()
+          //user.getBasicProfile().getImageUrl
+          this.googleuserprofilepic=user.getBasicProfile().getImageUrl()
+        }
+      })
+    })
+    if(RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(this.googleuseremail)){
+      this.GetallusertodoforExternalLogin(this.googleuseremail,true)
+    }else{
+      this.Getallusertodo(this.foruserid)
+    }*/
+
+    if(this.googleservice.Googleuserlogged){
+      this.googleuseremail=this.googleservice.Googleuserlogged.getBasicProfile().getEmail()
+      this.googleuserprofilepic=this.googleservice.Googleuserlogged.getBasicProfile().getImageUrl()
+      if(RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(this.googleuseremail)){
+        this.GetallusertodoforExternalLogin(this.googleuseremail,true)
+      }else{
+        return
+      }
+    }else{
+      this.Getallusertodo(this.foruserid)
+    }
+
+    
+    
   }
 
   //quando clicco la checkbox
@@ -90,6 +128,22 @@ export class TodoComponent implements OnInit {
         console.log(this.getallusertodo)
       },error:(error:HttpErrorResponse)=>{
         alert("unable to retrieve usertodo");
+        console.error(error.message)
+      }
+    })
+  }
+
+  GetallusertodoforExternalLogin(foruserid:string,externalloginuser:boolean){
+    this.todoservice.GetallusertodoforExternalLogin(foruserid,externalloginuser).subscribe({
+      next:(u)=>{
+        this.getallusertodo=u
+        if(this.getallusertodo){
+          this.getallusertodo.map((c)=>c.lastmodified=moment(c.lastmodified).format('YYYY-MM-DD hh:mm'))
+        }
+      },complete:()=>{
+        console.log(this.getallusertodo)
+      },error:(error:HttpErrorResponse)=>{
+        alert('unable to retrieve external user todo')
         console.error(error.message)
       }
     })
