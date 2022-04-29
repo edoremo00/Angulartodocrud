@@ -152,7 +152,12 @@ export class RegisterComponent implements OnInit,OnDestroy {
   }
 
   signin(){//login con Google
-    this.googleservice.signIn()
+    this.googleservice.signIn().then((token)=>{
+      if(token){
+        this.RegisterGoogleUser(token)
+        //this.RegisterGoogleUser(id_token)//chiamare questa funzione per registrare utente Google su BACKEND
+      }
+    })
   }
 
   shownoresultsfoundmessage(arrayutenti:Array<Identityuserinterface>):boolean{ //mostra il messaggio se non vengono trovati utenti
@@ -369,6 +374,17 @@ export class RegisterComponent implements OnInit,OnDestroy {
     this.usertoedit_todelete=usertodelete
     
     console.log("user to delete"+usertodelete.userid)
+  }
+
+  RegisterGoogleUser(id_token:string){
+    return this.authservice.RegisterGoogleUser(id_token).subscribe({
+      next:(result)=>{
+        console.log(result)
+      },
+      error:(error:HttpErrorResponse)=>{
+        console.warn(error)
+      }
+    })
   }
 
 }
