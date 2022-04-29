@@ -23,25 +23,31 @@ export class GoogleService {
    }
 
    signIn(){
-     this.auth2?.signIn({
+     return this.auth2!.signIn({
 
      }).then(user=>{
        debugger
        console.log(user)
+       let id_token=user.getAuthResponse().id_token
+      
       this.subject.next(user)//viene emesso valore da observable
       this.googleloggeduser=user
+      window.sessionStorage.setItem('googleuser',JSON.stringify(user))
       //se queste due istruzioni sono invertite causa problemi al corretto render della pagina todo 
       
       this.ngzone.run(()=>this.router.navigate(['todo']))
+      return id_token
 
      }).catch(()=>{
       this.subject.next(null)//emetto null a observable. qualcosa nella login non è andato a buon fine
+      return null
      })
    }
 
    signOut(){
      this.auth2?.signOut().then(()=>{
        this.subject.next(null)
+       window.sessionStorage.removeItem('googleuser')
        this.ngzone.run(()=>this.router.navigate(['home']))
 
      })
