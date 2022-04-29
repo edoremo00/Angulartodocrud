@@ -1,4 +1,4 @@
-import { HttpClient,HttpHeaders } from '@angular/common/http';
+import { HttpClient,HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -31,6 +31,14 @@ export class AuthService {
       headers:new HttpHeaders({
         "Content-type":"application/json"
       })
+    })
+  }
+
+  RegisterGoogleUser(token:string):Observable<any>{
+    return this.http.post<any>(`${this.apiauthbaseurl}ValidateGoogletoken`,{},{
+      headers:new HttpHeaders({
+        "Content-type":"application/json"
+      }),params:new HttpParams().set('token',token)
     })
   }
 
