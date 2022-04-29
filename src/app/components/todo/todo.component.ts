@@ -17,8 +17,11 @@ export class TodoComponent implements OnInit {
   
   
   foruserid:string="a9b1a280-2a47-4aea-ad5d-e9217549a119"
-  googleuseremail:any
+  googleuseremail:any//dati che arrivano da servizio googleservice e quindi da chiamata http
   googleuserprofilepic:any
+  googleuser_:any//dati utente google salvati in sessionstroage per evitare problema reload che perdo dati utente loggato
+  googleuser:any//utente google preso da Session Storage e fatto con mio oggetto custom
+
   todotitle:string="";
   filterquery:string="";
   testcheckbox:boolean=true;
@@ -66,7 +69,7 @@ export class TodoComponent implements OnInit {
   }
    
   ngOnInit(): void {
-    debugger
+    //debugger
     /*this.googleservice.observable().subscribe({
       next:((user)=>{
         if(user){
@@ -83,11 +86,22 @@ export class TodoComponent implements OnInit {
       this.Getallusertodo(this.foruserid)
     }*/
 
-    if(this.googleservice.Googleuserlogged){
-      this.googleuseremail=this.googleservice.Googleuserlogged.getBasicProfile().getEmail()
-      this.googleuserprofilepic=this.googleservice.Googleuserlogged.getBasicProfile().getImageUrl()
-      if(RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(this.googleuseremail)){
-        this.GetallusertodoforExternalLogin(this.googleuseremail,true)
+    if(this.googleservice.Googleuserlogged || window.sessionStorage.getItem('googleuser')){
+      this.googleuser_= window.sessionStorage.getItem('googleuser')
+      //console.log(this.googleuser as gapi.auth2.GoogleUser)
+      //let googleuserfromSessionStorage=this.googleuser_ as gapi.auth2.GoogleUser
+      let parsedgoogleUser=JSON.parse(this.googleuser_)
+      console.log(parsedgoogleUser)
+      this.googleuser={
+        email:parsedgoogleUser.Qu.Gv,
+        profilepic:parsedgoogleUser.Qu.NN
+      }
+      //googleuser.email= googleuserfromSessionStorage.getBasicProfile().getEmail()
+     // googleuser.profilepic=googleuserfromSessionStorage.getBasicProfile().getImageUrl()
+      //this.googleuseremail=this.googleservice.Googleuserlogged.getBasicProfile().getEmail()
+      //this.googleuserprofilepic=this.googleservice.Googleuserlogged.getBasicProfile().getImageUrl()
+      if(RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(this.googleuser.email)){
+        this.GetallusertodoforExternalLogin(this.googleuser.email,true)
       }else{
         return
       }
@@ -101,7 +115,7 @@ export class TodoComponent implements OnInit {
 
   //quando clicco la checkbox
   togglecheckbox(e:Event,todo:Itodointerface){
-    debugger
+    //debugger
     let element:HTMLElement=e.target as HTMLElement;
     //controllo che chi ha scatenato evento è la checkbox
     if(element.tagName==="INPUT"){
