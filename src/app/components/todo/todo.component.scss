@@ -69,7 +69,7 @@
 }
 
 /* The snackbar - position it at the bottom and in the middle of the screen */
-#snackbar,#snackbardelete,#snackbardone,#snackbarundone {
+#snackbar,#snackbardelete,#snackbardone,#snackbarundone,#Createdtodosnackbar,#FailCreatedtodosnackbar {
     visibility: hidden; /* Hidden by default. Visible on click */
     min-width: 250px; /* Set a default minimum width */
     margin-left: -150px; /* Divide value of min-width by 2 */
@@ -86,7 +86,7 @@
   }
   
   /* Show the snackbar when clicking on a button (class added with JavaScript) */
-  #snackbar.showsnackbar,#snackbardelete.showsnackbar,#snackbarerror.showsnackbar,#snackbardeleteerror.showsnackbar,#snackbardone.showsnackbar,#snackbarundone.showsnackbar {
+  #snackbar.showsnackbar,#snackbardelete.showsnackbar,#snackbarerror.showsnackbar,#snackbardeleteerror.showsnackbar,#snackbardone.showsnackbar,#snackbarundone.showsnackbar,#Createdtodosnackbar.showsnackbar,#FailCreatedtodosnackbar.showsnackbar {
     visibility: visible; /* Show the snackbar */
     /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
     However, delay the fade out process for 2.5 seconds */
@@ -115,7 +115,7 @@
     to {bottom: 0; opacity: 0;}
   }
 
-  #snackbarerror,#snackbardeleteerror {
+  #snackbarerror,#snackbardeleteerror,#FailCreatedtodosnackbar {
     visibility: hidden; /* Hidden by default. Visible on click */
     min-width: 250px; /* Set a default minimum width */
     margin-left: -125px; /* Divide value of min-width by 2 */
@@ -199,4 +199,8 @@
 
 .noresultsmessage{
   text-align: center;
+}
+
+.createtodoformerrormessage{
+  color:red
 }
