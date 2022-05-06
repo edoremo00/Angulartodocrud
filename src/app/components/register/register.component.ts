@@ -120,7 +120,7 @@ export class RegisterComponent implements OnInit,OnDestroy {
 
   
 
-  constructor(private authservice:AuthService,private router:Router,private ngzone:NgZone,private userservice:UserService,private googleservice:GoogleService,private ref:ChangeDetectorRef) { }
+  constructor(private authservice:AuthService,private router:Router,private userservice:UserService) { }
   ngOnDestroy(): void {
     //console.log('rimossa subscription')
     this.googleuserservicesubscription.unsubscribe()
@@ -130,7 +130,7 @@ export class RegisterComponent implements OnInit,OnDestroy {
   ngOnInit(): void {
     
      this.Getall()
-    this.googleuserservicesubscription= this.googleservice.observable().subscribe({
+    /*this.googleuserservicesubscription= this.googleservice.observable().subscribe({
        next:(googleuser)=>{
          if(googleuser){//solo se ho utente
           this.loggedGoogleuser=googleuser?.getBasicProfile().getEmail()
@@ -140,7 +140,7 @@ export class RegisterComponent implements OnInit,OnDestroy {
         this.ref.detectChanges()//ascolto sempre i cambiamenti
         
        }
-     })/*user=>{
+     })*//*user=>{
        this.loggedGoogleuser=user?.getBasicProfile().getEmail()
        console.log('infoutente', this.loggedGoogleuser)
        this.ref.detectChanges()//. questo osservo cambiamenti a utente loggato. se fa logout sarà null sennò avrò nuovo valore ecc
@@ -151,14 +151,14 @@ export class RegisterComponent implements OnInit,OnDestroy {
      
   }
 
-  signin(){//login con Google
+  /*signin(){//login con Google
     this.googleservice.signIn().then((token)=>{
       if(token){
         this.RegisterGoogleUser(token)
         //this.RegisterGoogleUser(id_token)//chiamare questa funzione per registrare utente Google su BACKEND
       }
     })
-  }
+  }*/
 
   shownoresultsfoundmessage(arrayutenti:Array<Identityuserinterface>):boolean{ //mostra il messaggio se non vengono trovati utenti
     //in seguito a ricerca
@@ -326,9 +326,7 @@ export class RegisterComponent implements OnInit,OnDestroy {
       }
   }
 
-  premuto():void{
-    console.log('premuto tasto')
-  }
+  
 
   oneditmodalclosed(){//mostra popup di conferma
    //MOSTRARE IL MESSAGGIO SOLO SE UTENTE HA EFFETTUATO ALMENO UNA MODIFICA
@@ -376,16 +374,22 @@ export class RegisterComponent implements OnInit,OnDestroy {
     console.log("user to delete"+usertodelete.userid)
   }
 
-  RegisterGoogleUser(id_token:string){
+  /*RegisterGoogleUser(id_token:string){
     return this.authservice.RegisterGoogleUser(id_token).subscribe({
       next:(result)=>{
-        console.log(result)
+        if(result.claims){
+          let userid=result.claims.filter((c:any)=>c.type==="sub")[0].value
+          sessionStorage.setItem('id',userid)
+        }
+        sessionStorage.setItem('tok',result.encodedPayload)
+        
+       
       },
       error:(error:HttpErrorResponse)=>{
         console.warn(error)
       }
     })
-  }
+  }*/
 
 }
 
