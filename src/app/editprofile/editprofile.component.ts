@@ -1,4 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AuthService } from '../services/auth.service';
+import { GoogleService } from '../services/google.service';
 
 @Component({
   selector: 'app-editprofile',
@@ -7,7 +9,8 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 })
 export class EditprofileComponent implements OnInit,AfterViewInit {
 
-  constructor() { }
+  externalLogin:string|null=window.sessionStorage.getItem('externallogin')//per sapere se utente loggato con Google o no
+  constructor(private authservice:AuthService,private googleservice:GoogleService) { }
   inputfile:any;
   ngAfterViewInit(): void {
     this.inputfile=document.getElementById('formFileSm')
@@ -34,6 +37,18 @@ export class EditprofileComponent implements OnInit,AfterViewInit {
       }
      
     }
+  }
+
+  SignOutGoogleorNormal() {
+    this.externalLogin ? (this.googleservice.signOut(),
+    this.authservice.LogOut(true))//rimuove mie chiavi da session storage
+    : this.LogOut()
+
+    
+  }
+
+  LogOut(){
+    this.authservice.LogOut(false)
   }
 
 }

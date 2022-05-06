@@ -42,6 +42,14 @@ export class AuthService {
     })
   }
 
+  LogOut(external:boolean){
+    external ? (window.sessionStorage.removeItem('externallogin'), window.sessionStorage.removeItem('googleuser')) : ""
+    window.sessionStorage.removeItem('id')
+    window.sessionStorage.removeItem('user')
+    window.sessionStorage.removeItem('tok')
+    
+  }
+
  
 
 }
