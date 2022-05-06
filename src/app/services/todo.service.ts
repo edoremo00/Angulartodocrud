@@ -47,4 +47,12 @@ export class TodoService {
       })
     })
   }
+
+  CreateTodo(todoDTO:Itodointerface):Observable<Itodointerface>{
+    return this.http.post<Itodointerface>(`${this.todobaseurl}/CreateTodo`,todoDTO,{
+      headers:new HttpHeaders({
+        "Content-type":"application/json"
+      })
+    })
+  }
 }
